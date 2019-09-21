@@ -2,8 +2,10 @@ analyzer:
   listen: 0.0.0.0:8082
   topology:
     fabric:
-    - TOR[Name=tor] -> TOR_PORT1[Name=network, MTU=1500]
-    - TOR_PORT1 -> *[Type=host, Name=network]/bond0
+{% for host in groups['network'] %}
+    - TOR[Name=tor] -> TOR_PORT1[Name={{host}}, MTU=1500]
+    - TOR_PORT1 -> *[Type=host, Name={{host}}]/bond0
+{% endfor %}
 {% for host in groups['compute'] %}
     - TOR[Name=tor] -> TOR_PORT{{loop.index+1}}[Name={{host}}, MTU=1500]
     - TOR_PORT{{loop.index+1}} -> *[Type=host, Name={{host}}]/bond0

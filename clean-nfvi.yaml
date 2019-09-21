@@ -26,8 +26,9 @@
 
     - name: kill mininet
       uri:
-        url: http://localhost:5000/start
-
+        url: http://localhost:5000/exit
+      ignore_errors: yes
+      
     - name: stop onos
       service:
         name: onos
