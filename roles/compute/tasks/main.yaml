@@ -1,0 +1,9 @@
+- import_tasks: ./initial-setup.yaml
+
+- import_tasks: ./setup-node-keys.yaml
+
+- import_tasks: ./nicbond.yaml
+  when: inventory_hostname in groups.compute or inventory_hostname in groups.network
+
+- import_tasks: ./skydive.yaml
+  when: (inventory_hostname in groups.compute or inventory_hostname in groups.network) and install_skydive == true

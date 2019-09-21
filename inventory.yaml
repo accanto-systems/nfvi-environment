@@ -1,0 +1,62 @@
+##############################################################
+# Host machine
+##############################################################
+[underlay]
+basehost ansible_host=192.168.1.168 ansible_connection="ssh" ansible_user="ubuntu" ansible_ssh_pass="ubuntu" ansible_become_pass="ubuntu" ansible_ssh_common_args='-o StrictHostKeyChecking=no' #ansible_ssh_private_key_file="~/demo.pem"
+
+##############################################################
+# AIO VM
+##############################################################
+[aio]
+lm ansible_host=192.168.10.5 vagrant_mem=16096 vagrant_cpu=2
+
+##############################################################
+# K8s VMs
+##############################################################
+[master]
+master1 ansible_host=192.168.10.50 vagrant_mem=4096 vagrant_cpu=2
+
+[workers]
+worker1 ansible_host=192.168.10.51 vagrant_mem=8192 vagrant_cpu=1
+#worker2 ansible_host=192.168.10.52 vagrant_mem=8192 vagrant_cpu=1
+
+[k8s:children]
+master
+workers
+
+##############################################################
+# Openstack VMs
+##############################################################
+[control]
+controlnode ansible_host=192.168.10.10 vagrant_mem=8096 vagrant_cpu=2
+
+[network]
+networknode ansible_host=192.168.10.11 vagrant_mem=2048 vagrant_cpu=1
+
+[compute]
+computenode1 ansible_host=192.168.10.12 vagrant_mem=8192 vagrant_cpu=1
+#computenode2 ansible_host=192.168.10.13 vagrant_mem=8192 vagrant_cpu=1
+
+[openstack:children]
+control
+network
+compute
+
+[openstack:vars]
+public_interface=eth1
+
+##############################################################
+# Connection parameters for Openstack and K8s Virtual Machines
+##############################################################
+[datacentre:children]
+underlay
+openstack
+k8s
+aio
+
+[datacentre:vars]
+ansible_connection="ssh" 
+ansible_user="vagrant" 
+ansible_ssh_pass="vagrant" 
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ProxyCommand="sshpass -p ubuntu ssh -o StrictHostKeyChecking=no -W %h:%p ubuntu@192.168.1.168"'
+#ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ProxyCommand="ssh -i ~/demo.pem -o StrictHostKeyChecking=no -W %h:%p ubuntu@192.168.1.168"'

@@ -1,0 +1,45 @@
+--- 
+- hosts: underlay
+  gather_facts: no
+  become: yes
+  vars_files:
+    - variables.yaml
+  tasks:
+
+    - name: destroy openstack
+      when: openstack_install == true
+      command: vagrant destroy -f
+      args:
+        chdir: /opt/openstack
+
+    - name: destroy k8s
+      when: kubernetes_install == true
+      command: vagrant destroy -f
+      args:
+        chdir: /opt/k8s
+
+    - name: destroy LM AIO
+      when: AIO_VM == true
+      command: vagrant destroy -f
+      args:
+        chdir: /opt/lm
+
+    - name: kill mininet
+      uri:
+        url: http://localhost:5000/start
+
+    - name: stop onos
+      service:
+        name: onos
+        state: stopped
+
+    - name: disable onos
+      systemd:
+        name: onos
+        enabled: no
+        masked: no
+
+    - name: clean onos directory
+      file:
+        path: /opt/onos
+        state: absent

@@ -1,0 +1,10 @@
+- import_tasks: ./initial-setup.yaml
+
+- import_tasks: ./setup-node-keys.yaml
+
+- import_tasks: ./nicbond.yaml
+  when: inventory_hostname in groups.workers
+
+- import_tasks: ./skydive.yaml
+  when: inventory_hostname in groups.workers and install_skydive == true
+

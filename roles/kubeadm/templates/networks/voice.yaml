@@ -1,0 +1,20 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: voice
+spec:
+  config: '{
+            "name": "voice",
+            "type": "bridge",
+            "bridge": "br-voice",
+            "isDefaultGateway": true,
+            "forceAddress": false,
+            "ipMasq": true,
+            "hairpinMode": true,
+            "ipam": {
+              "type": "host-local",
+              "subnet": "10.0.10.0/24",
+              "rangeStart": "10.0.10.55",
+              "rangeEnd": "10.0.10.100"
+            }
+        }'

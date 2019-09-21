@@ -1,0 +1,9 @@
+- name: remove br-tun if it exists
+  openvswitch_bridge:
+    bridge: br-tun
+    state: absent
+
+- name: create br-tun
+  openvswitch_bridge:
+    bridge: br-tun
+    state: present

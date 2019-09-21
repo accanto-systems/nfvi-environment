@@ -1,0 +1,14 @@
+- name: Create .kube directory for enabling non-root user 
+  file:
+    path: ~/.kube
+    state: directory
+    mode: 0755
+
+- name: Copy kubernetes admin.conf to .kube for enabling non-root user 
+  copy:
+    src: /etc/kubernetes/admin.conf
+    remote_src: true
+    dest: ~/.kube/config
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+

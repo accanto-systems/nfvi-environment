@@ -1,0 +1,61 @@
+- name: check if mininet already exists
+  stat:
+    path: /opt/mininet
+  register: mininet_result
+
+- name: install base dependencies
+  apt: 
+    name: ['build-essential','ant','maven','python-dev','git'] 
+    state: present
+  when: mininet_result.stat.exists == False 
+
+- name: install flask
+  pip: 
+    name: flask
+  when: mininet_result.stat.exists == False 
+
+- name: clone mininet
+  git:
+    repo: 'https://github.com/mininet/mininet'
+    dest: /opt/mininet
+  when: mininet_result.stat.exists == False 
+
+- name: install mininet
+  command: ./mininet/util/install.sh -nfv
+  args:
+    chdir: /opt/
+  ignore_errors: True
+  when: mininet_result.stat.exists == False
+
+- name: remove test controller
+  apt: 
+    name: openvswitch-testcontroller
+    state: absent
+
+- name: check if mininet is running
+  delegate_to: basehost
+  wait_for:
+    port: 5000
+    delay: 1
+    timeout: 10
+    msg: "Timeout waiting for 5000 to respond"
+  register: port_check
+  ignore_errors: yes
+
+- name: write mininet app
+  become: yes
+  when: port_check.failed == true
+  template:
+    src: mininet_setup.py
+    dest: /opt/mininet_setup.py
+    mode: 0777
+
+- name: run mininet
+  become: yes
+  when: port_check.failed == true
+  raw: nohup /opt/mininet_setup.py < /dev/null > /dev/null 2>&1 & sleep 5
+
+- name: start mininet
+  when: port_check.failed == true
+  uri:
+    url: http://localhost:5000/start

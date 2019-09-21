@@ -1,0 +1,26 @@
+############################################################################
+# start k8s dashboard
+############################################################################
+
+- name: Copy Dashboard Configuration
+  template: 
+    src: dashboard.yml
+    dest: /tmp/
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0644
+
+- name: Copy Dashboard Admin Configuration
+  template: 
+    src: dashboard-admin.yml
+    dest: /tmp/
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0644
+  
+- name: Install Kubernetes Dashboard
+  command: kubectl apply -f /tmp/dashboard.yml
+
+- name: Grant admin privileges to Kubernetes dashboard
+  command: kubectl apply -f /tmp/dashboard-admin.yml
+

@@ -1,0 +1,49 @@
+###############################################
+# AIO VM
+###############################################
+# Create AIO empty VM
+AIO_VM: False
+
+###############################################
+# docker
+###############################################
+docker_version: 17.06.2~ce-0~ubuntu 
+docker_compose_version: 1.15.0
+#docker_insecure_registries:
+  #- myregistry:5000
+
+###############################################
+# kubernetes
+###############################################
+kubernetes_install: True
+# k8s versions
+kubecni_version: "0.6.0-00"
+kubectl_version: "1.10.6-00"
+kubeadm_version: "1.10.6-00"
+kubelet_version: "1.10.6-00"
+# Allow pods to run on Master
+kubeadm_taint_master: False
+# In a multi network interface server you can specify which ip address to bind kubeadm to, otherwise comment this variable out
+# and the default IP address discovered by Ansible will be used
+kubeadm_advertise_address: "{{ hostvars['master1']['ansible_host'] }}"
+# With a vagrant environment the first network interface is used by Vagrant. The network interface to bind kubeadm to must be specified here, e.g. eth1.
+# If provisioning a non-vagrant AIO environment change this variable to the main network interface or comment out and Ansible will use the default interface name.
+flannel_interface: "eth1"
+# Enable to install Kubernetes dashboard
+kube_dashboard: True
+
+###############################################
+# openstack
+###############################################
+openstack_install: True
+openstack_install_demo: True
+openstack_public_ip: "172.24.4.3"
+openstack_public_cidr: "172.24.4.0/24"
+openstack_start_float: "172.24.4.4"
+openstack_end_float: "172.24.4.250"
+
+###############################################
+# Skydive
+###############################################
+install_skydive: True
+

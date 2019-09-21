@@ -1,0 +1,19 @@
+--- 
+- hosts: underlay
+  gather_facts: no
+  become: yes
+  vars_files:
+    - variables.yaml
+  tasks:
+    - import_role:
+        name: underlay
+    - import_role:
+        name: vagrant
+
+- name: Include k8s playbook
+  import_playbook: setup-k8s.yaml
+  when: kubernetes_install == true
+
+- name: Include openstack playbook
+  import_playbook: setup-openstack.yaml
+  when: openstack_install == true

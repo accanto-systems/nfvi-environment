@@ -1,0 +1,20 @@
+- name: check if skydive exists
+  stat:
+    path: /opt/skydive
+  register: skydive_result
+
+- name: download skydive release
+  get_url: 
+    url:  https://github.com/skydive-project/skydive/releases/download/v0.23.0/skydive
+    dest: /opt/skydive
+    mode: 0777
+  when: skydive_result.stat.exists == False 
+
+- name: cp skydive configuration file
+  template:
+    src: "skydive.host.yml"
+    dest: /opt/skydive.yml
+    mode: 0644
+
+- name: run skydive on transport
+  raw: nohup /opt/skydive --conf /opt/skydive.yml analyzer < /dev/null > /dev/null 2>&1 & sleep 5

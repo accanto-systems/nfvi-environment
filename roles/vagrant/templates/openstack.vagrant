@@ -1,0 +1,63 @@
+Vagrant.configure(2) do |config|
+
+  config.vm.define 'control' do |nodeconfig|
+    nodeconfig.vm.hostname = 'control'
+    nodeconfig.vm.box = 'accanto/centos7'
+    nodeconfig.vm.box_version = "1.0"
+    nodeconfig.vm.synced_folder ".", "/vagrant", disabled: true
+    nodeconfig.vm.network :private_network, :ip => "{{ hostvars['controlnode']['ansible_host'] }}"
+    nodeconfig.vm.network :public_network, :dev => "br-tun", :mode => "bridge", :type => "bridge", :ovs => true, auto_config: false
+
+    nodeconfig.vm.provider :libvirt do |libvirt|
+      libvirt.cpus = {{ hostvars['controlnode']['vagrant_cpu'] }}
+      libvirt.memory = {{ hostvars['controlnode']['vagrant_mem'] }}
+      libvirt.nested = true
+      libvirt.cpu_mode = 'host-passthrough'
+    end
+  end
+
+  config.vm.define 'network' do |nodeconfig|
+    nodeconfig.vm.hostname = 'network'
+    nodeconfig.vm.box = 'accanto/centos7'
+    nodeconfig.vm.box_version = "1.0"
+    nodeconfig.vm.synced_folder ".", "/vagrant", disabled: true
+    nodeconfig.vm.network :private_network, :ip => "{{ hostvars['networknode']['ansible_host'] }}"
+    nodeconfig.vm.network :public_network, :dev => "br-tun", :mode => "bridge", :type => "bridge", :ovs => true, auto_config: false
+    nodeconfig.vm.network :public_network, :dev => "s1", :mode => "bridge", :type => "bridge", :ovs => true, auto_config: false
+    nodeconfig.vm.network :public_network, :dev => "s2", :mode => "bridge", :type => "bridge", :ovs => true, auto_config: false
+    # external network
+    # ----------------
+    # below binds to existing public switch, assumes nat etc is setup outside of vagrant
+    # nodeconfig.vm.network :public_network, :dev => "br0", :mode => "bridge", :type => "bridge", :ovs => true, auto_config: false
+
+    # below creates a private vagrant network
+    nodeconfig.vm.network :private_network, :ip => "{{ openstack_public_ip }}"
+
+    nodeconfig.vm.provider :libvirt do |libvirt|
+      libvirt.cpus = {{ hostvars['networknode']['vagrant_cpu'] }}
+      libvirt.memory = {{ hostvars['networknode']['vagrant_mem'] }}
+      libvirt.nested = true
+      libvirt.cpu_mode = 'host-passthrough'
+    end
+  end
+
+{% for host in groups['compute'] %}
+  config.vm.define "{{ hostvars[host].inventory_hostname }}" do |nodeconfig|
+    nodeconfig.vm.hostname = "{{ hostvars[host].inventory_hostname }}"
+    nodeconfig.vm.box = 'accanto/centos7'
+    nodeconfig.vm.box_version = "1.0"
+    nodeconfig.vm.synced_folder ".", "/vagrant", disabled: true
+    nodeconfig.vm.network :private_network, :ip => "{{ hostvars[host]['ansible_host'] }}"
+    nodeconfig.vm.network :public_network, :dev => "br-tun", :mode => "bridge", :type => "bridge", :ovs => true, auto_config: false
+    nodeconfig.vm.network :public_network, :dev => "s1", :mode => "bridge", :type => "bridge", :ovs => true, auto_config: false
+    nodeconfig.vm.network :public_network, :dev => "s2", :mode => "bridge", :type => "bridge", :ovs => true, auto_config: false
+
+    nodeconfig.vm.provider :libvirt do |libvirt|
+      libvirt.cpus = {{ hostvars[host]['vagrant_cpu'] }}
+      libvirt.memory = {{ hostvars[host]['vagrant_mem'] }}
+      libvirt.nested = true
+      libvirt.cpu_mode = 'host-passthrough'
+    end
+  end
+{% endfor %}
+end

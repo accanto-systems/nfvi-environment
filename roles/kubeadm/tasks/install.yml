@@ -1,0 +1,77 @@
+- name: Install Base Dependencies
+  apt: 
+    name: ['apt-transport-https','ca-certificates','curl','build-essential','git','software-properties-common'] 
+    state: present
+
+- name: Gather Facts
+  setup:
+
+- name: Add hostname to hosts file
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ advertise_address|default(hostvars[inventory_hostname]['ansible_default_ipv4']['address']) }} {{inventory_hostname}}"
+    state: present
+
+- name: Stop Apparmor
+  command: /etc/init.d/apparmor stop
+
+- name: Remove Apparmor
+  command: update-rc.d -f apparmor remove
+
+- name: Check is ufw installed
+  shell: command -v ufw >/dev/null 2>&1
+  register: is_ufw_exist
+  ignore_errors: yes
+
+- name: Disabling ufw
+  command: ufw disable
+  become: yes
+  when: is_ufw_exist.rc == 0
+
+- name: Set ip forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    sysctl_set: yes
+
+- name: Set bridged ipv4 permission
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: 262144
+    sysctl_set: yes
+
+- name: Gather exsting package versions
+  package_facts:
+    manager: auto
+  
+- name: Add Kubernetes apt signing key
+  apt_key: 
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Add Kubernetes apt repository
+  apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+
+- name: Install Kube packages
+  apt: 
+    state: present 
+    update_cache: yes
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - "kubeadm={{ kubeadm_version }}"
+    - "kubectl={{ kubectl_version }}"
+    - "kubelet={{ kubelet_version }}"
+    - "kubernetes-cni={{ kubecni_version }}"
+
+- name: Ensure kubelet is enabled at boot
+  service:
+    name: kubelet
+    state: started
+    enabled: true
+
+- name: Disable Swap
+  command: swapoff -a
+
