@@ -38,32 +38,24 @@
       - tightvncserver
       - firefox
 
-# - name: set vnc password
-#   command: "echo accantodemo | vncpasswd -f > {{ '~' + ansible_user | expanduser }}/.vnc/passwd"
-
-# - name: Run vnc server for first time
-#   expect:
-#     command: vncserver
-#     responses:
-#       (.*)Password(.*): accantodemo
-#       (.*)Verify(.*): accantodemo
-
-# - name: kill vncserver
-#   command: vncserver -kill :2
-
-- name: Ensure .vnc directory exists
-  file:
+- name: check if xstart already exists
+  stat:
     path: "{{ '~' + ansible_user | expanduser }}/.vnc/xstartup"
-    state: directory
-    mode: '0777'    
+  register: xstart_file
 
-- name: Update xstart file
+- name: create .vnc directory
+  when: xstart_file.stat.exists
+  file:
+    path: "{{ '~' + ansible_user | expanduser }}/.vnc"
+    state: directory
+    mode: '0777'
+
+- name: update xstart file
+  when: xstart_file.stat.exists
   template:
     src: xstartup
+    force: true
     dest: "{{ '~' + ansible_user | expanduser }}/.vnc/xstartup"
-
-# - name: Run vnc server
-#   command: vncserver
 
 - name: Install vagrant
   apt:
