@@ -1,7 +1,7 @@
 Vagrant.configure(2) do |config|
 
-  config.vm.define 'control' do |nodeconfig|
-    nodeconfig.vm.hostname = 'control'
+  config.vm.define 'controlnode' do |nodeconfig|
+    nodeconfig.vm.hostname = 'controlnode'
     nodeconfig.vm.box = 'accanto/centos7'
     nodeconfig.vm.box_version = "1.0"
     nodeconfig.vm.synced_folder ".", "/vagrant", disabled: true
@@ -16,8 +16,8 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  config.vm.define 'network' do |nodeconfig|
-    nodeconfig.vm.hostname = 'network'
+  config.vm.define 'networknode' do |nodeconfig|
+    nodeconfig.vm.hostname = 'networknode'
     nodeconfig.vm.box = 'accanto/centos7'
     nodeconfig.vm.box_version = "1.0"
     nodeconfig.vm.synced_folder ".", "/vagrant", disabled: true

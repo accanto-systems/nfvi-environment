@@ -37,8 +37,9 @@
   delegate_to: basehost
   wait_for:
     port: 22
-    host: "{{ hostvars['master1']['ansible_host'] }}"
+    host: "{{ hostvars[item]['ansible_host'] }}"
     delay: 10
+  with_items: "{{ groups['k8s'] }}"
 
 # install openstack vms
 - name: check if control node is up
@@ -79,9 +80,9 @@
   delegate_to: basehost
   wait_for:
     port: 22
-    host: "{{ hostvars['controlnode']['ansible_host'] }}"
+    host: "{{ hostvars[item]['ansible_host'] }}"
     delay: 10
-
+  with_items: "{{ groups['openstack'] }}"
 
 # install AIO vm
 - name: check if AIO node is up
