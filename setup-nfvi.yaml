@@ -12,8 +12,8 @@
 
 - name: Include k8s playbook
   import_playbook: setup-k8s.yaml
-  when: kubernetes_install == true
+  when: kubernetes_install == true and hostvars['basehost']['kubernetes_running'] == false
 
 - name: Include openstack playbook
   import_playbook: setup-openstack.yaml
-  when: openstack_install == true
+  when: openstack_install == true and hostvars['basehost']['openstack_running'] == false
