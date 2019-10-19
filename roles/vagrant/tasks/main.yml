@@ -63,6 +63,7 @@
 
 - set_fact: 
     openstack_running: "{{ true if port_check.failed == false else false }}"
+  when: openstack_install == true 
 
 - name: create openstack vagrant dir
   when: openstack_install == true and port_check.failed == true

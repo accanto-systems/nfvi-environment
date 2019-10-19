@@ -17,10 +17,10 @@ docker_compose_version: 1.15.0
 ###############################################
 kubernetes_install: True
 # k8s versions
-kubecni_version: "0.6.0-00"
-kubectl_version: "1.10.6-00"
-kubeadm_version: "1.10.6-00"
-kubelet_version: "1.10.6-00"
+kubecni_version: "0.7.5-00"
+kubectl_version: "1.16.1-00"
+kubeadm_version: "1.16.1-00"
+kubelet_version: "1.16.1-00"
 # Allow pods to run on Master
 kubeadm_taint_master: False
 # In a multi network interface server you can specify which ip address to bind kubeadm to, otherwise comment this variable out
@@ -37,6 +37,7 @@ kube_dashboard: True
 ###############################################
 openstack_install: True
 openstack_install_demo: True
+openstack_bridge_ip: "172.24.4.1"
 openstack_public_ip: "172.24.4.3"
 openstack_public_cidr: "172.24.4.0/24"
 openstack_start_float: "172.24.4.4"
