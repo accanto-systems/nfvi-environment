@@ -58,5 +58,5 @@ aio
 ansible_connection="ssh" 
 ansible_user="vagrant" 
 ansible_ssh_pass="vagrant" 
-ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ProxyCommand="sshpass -p ubuntu ssh -o StrictHostKeyChecking=no -W %h:%p ubuntu@192.168.1.168"'
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 #ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ProxyCommand="ssh -i ~/demo.pem -o StrictHostKeyChecking=no -W %h:%p ubuntu@192.168.1.168"'
