@@ -17,9 +17,13 @@ More details on the environment setup can be found [here](/docs/environment.md).
 
 See the [installation guide](/docs/install.md) to customise and create a working NFVI environment.
 
-## Acccessing NFVI Services
+The Ansible installation scripts will create an NFVI lab environment on a single machine as depicted in the picture below. 
 
 ![Lab setup](/docs/images/lab.PNG)
+
+A number of internal linux and openvswith networks will be created that are attached to Openstack and Kubernetes compute and worker virtual machines. 
+
+### Acccessing NFVI Services
 
 * LM - https://192.168.10.5:8082
 * CICD Hub - http://192.168.10.5:8084-7
