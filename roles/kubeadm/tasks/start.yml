@@ -29,30 +29,6 @@
 - name: Create Multus Daemonset
   command: kubectl apply -f /tmp/multus-daemonset.yml
 
-- name: Copy mgmt network
-  template:
-    src: networks/mgmt.yaml
-    dest: /tmp/
-
-- name: Create mgmt network
-  command: kubectl apply -f /tmp/mgmt.yaml
-
-- name: Copy internal network
-  template:
-    src: networks/internal.yaml
-    dest: /tmp/
-
-- name: Create voice network
-  command: kubectl apply -f /tmp/internal.yaml
-
-- name: Copy voice network
-  template:
-    src: networks/voice.yaml
-    dest: /tmp/
-
-- name: Create voice network
-  command: kubectl apply -f /tmp/voice.yaml
-
 - name: Taint Kubeadm master
   command: kubectl taint nodes --all node-role.kubernetes.io/master-
   failed_when: false
