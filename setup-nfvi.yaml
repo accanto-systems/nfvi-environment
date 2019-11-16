@@ -9,6 +9,9 @@
         name: underlay
     - import_role:
         name: vagrant
+    - import_role:
+        name: openvpn
+      when: install_openvpn == true
 
 - name: Include k8s playbook
   import_playbook: setup-k8s.yaml

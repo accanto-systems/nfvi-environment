@@ -44,3 +44,10 @@
       file:
         path: /opt/onos
         state: absent
+
+    - name: disable openvpn server
+      when: install_openvpn == True
+      service:
+        name: openvpn@server
+        state: stopped
+        enabled: no

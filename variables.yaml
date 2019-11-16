@@ -48,3 +48,10 @@ openstack_end_float: "172.24.4.250"
 ###############################################
 install_skydive: True
 
+###############################################
+# OpenVPN
+###############################################
+install_openvpn: False
+openvpn_port: 1194
+# change this to the public IP address or domain name of the bare metal Ubuntu server
+openvpn_public_ip: 10.0.0.1
