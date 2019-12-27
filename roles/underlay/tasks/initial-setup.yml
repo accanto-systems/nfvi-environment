@@ -57,9 +57,21 @@
     force: true
     dest: "{{ '~' + ansible_user | expanduser }}/.vnc/xstartup"
 
-- name: Install vagrant
+- name: check if vagrant deb file is already downloaded
+  stat: 
+    path: /opt/{{ vagrant_deb_file }}
+  register: vagrant_deb_result    
+
+- name: download latest vagrant release
+  get_url: 
+    url:  "{{ vagrant_url }}{{ vagrant_deb_file }}"
+    dest: /opt
+  when: vagrant_deb_result.stat.exists == False 
+
+- name: install vagrant 
   apt:
-    name: vagrant
+    deb: /opt/{{ vagrant_deb_file }}
+  when: vagrant_deb_result.stat.exists == False 
 
 - name: Install vagrant dependencies for libvirt plugin
   action: >
@@ -74,9 +86,11 @@
       - libvirt-dev 
       - zlib1g-dev 
       - ruby-dev
+  when: vagrant_deb_result.stat.exists == False 
 
 - name: Install vagrant libvirt plugin
   command: vagrant plugin install vagrant-libvirt
+  when: vagrant_deb_result.stat.exists == False 
 
 - name: remove any domain search in resolv.conf
   shell: "sed -e 's/^search/#search/' -i /etc/resolv.conf"

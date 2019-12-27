@@ -15,7 +15,7 @@
 
 - name: download onos
   get_url: 
-    url: http://repo1.maven.org/maven2/org/onosproject/onos-releases/2.1.0/onos-2.1.0.tar.gz
+    url: "{{ onos_url }}"
     dest: /opt/
     mode: 0744
   when: onos_tar_result.stat.exists == False 

@@ -5,7 +5,7 @@
 
 - name: download skydive release
   get_url: 
-    url:  https://github.com/skydive-project/skydive/releases/download/v0.23.0/skydive
+    url:  "{{ skydive_url }}"
     dest: /opt/skydive
     mode: 0777
   when: skydive_result.stat.exists == False 

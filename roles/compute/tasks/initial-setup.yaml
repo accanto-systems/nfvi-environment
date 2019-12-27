@@ -1,3 +1,55 @@
+- name: register rhel subscription
+  redhat_subscription:
+    state: present
+    username: "{{ subscription_user }}"
+    password: "{{ subscription_password }}"
+    auto_attach: true
+    pool_ids: "{{ openstack_pool_id }}"
+  when: openstack_offical_redhat == true
+
+- name: Disable all RHSM repositories
+  rhsm_repository:
+    name: '*'
+    state: disabled
+  when: openstack_offical_redhat == true
+
+- name: Enable rhel 7 server repository
+  rhsm_repository:
+    name: rhel-7-server-rpms
+  when: openstack_offical_redhat == true
+
+- name: Enable rhel 7 common
+  rhsm_repository:
+    name: rhel-7-server-rh-common-rpms   
+  when: openstack_offical_redhat == true
+
+- name: Enable extras
+  rhsm_repository:
+    name: rhel-7-server-extras-rpms
+  when: openstack_offical_redhat == true
+
+- name: Enable openstack
+  rhsm_repository:
+    name: rhel-7-server-openstack-13-rpms
+  when: openstack_offical_redhat == true
+
+- name: Enable openstack dev tools
+  rhsm_repository:
+    name: rhel-7-server-openstack-13-devtools-rpms
+  when: openstack_offical_redhat == true
+
+- name: install utility packages
+  yum:
+    name: yum-utils
+    state: present
+  when: openstack_offical_redhat == true
+
+- name: upgrade all packages
+  yum:
+    name: '*'
+    state: latest
+  when: openstack_offical_redhat == true
+
 - name: stop firewalld
   systemd:
     name: firewalld
@@ -15,25 +67,6 @@
     name: network
     state: started
     enabled: yes
-
-- name: install kvm
-  yum:
-    name:
-      - qemu-kvm
-      - libvirt 
-      - libvirt-python 
-      - libvirt-client 
-      - libguestfs-tools
-      - virt-install 
-    state: present
-  when: inventory_hostname in groups.compute
-
-- name: start libvirt service
-  systemd:
-    name: libvirtd
-    state: started
-    enabled: yes
-  when: inventory_hostname in groups.compute
 
 - name: split ip address
   set_fact:

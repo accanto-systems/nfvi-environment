@@ -1,9 +1,10 @@
-- name: install openstack release
+- name: install unofficial centos openstack release
   yum:
     name:
       - centos-release-openstack-stein
     state: present
     update_cache: yes
+  when: openstack_offical_redhat == false
 
 - name: install packstack
   yum:

@@ -1,4 +1,18 @@
 --- 
+- hosts: openstack
+  gather_facts: no
+  become: yes
+  vars_files:
+    - variables.yaml
+  tasks:
+    - name: unregister subscription from openstack nodes
+      redhat_subscription:
+        state: absent
+        username: "{{ subscription_user }}"
+        password: "{{ subscription_password }}"
+        pool_ids: "{{ openstack_pool_id }}"
+      when: openstack_install == true and openstack_offical_redhat == true
+
 - hosts: underlay
   gather_facts: no
   become: yes
@@ -51,3 +65,7 @@
         name: openvpn@server
         state: stopped
         enabled: no
+
+    - name: kill skydive
+      command: pkill skydive
+      when: install_skydive == True
