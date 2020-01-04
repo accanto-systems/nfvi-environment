@@ -1,8 +1,0 @@
-- name: Get join command from Kubeadm Master
-  delegate_to: "master1"
-  command: kubeadm token create --print-join-command
-  changed_when: false
-  register: join_command_register
-
-- name: Join node to Kubeadm Master
-  command: "{{ join_command_register.stdout }} --ignore-preflight-errors cri"

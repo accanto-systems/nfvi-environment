@@ -1,3 +1,0 @@
-# run packstack
-- import_tasks: ./install-packstack.yaml
-  when: inventory_hostname in groups.control

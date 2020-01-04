@@ -13,34 +13,54 @@ lm ansible_host=192.168.10.5 vagrant_mem=16096 vagrant_cpu=2
 ##############################################################
 # K8s VMs
 ##############################################################
-[master]
-master1 ansible_host=192.168.10.50 vagrant_mem=4096 vagrant_cpu=2
+[k8s-masters]
+k8smaster ansible_host=192.168.10.50 vagrant_mem=4096 vagrant_cpu=2
 
-[workers]
-worker1 ansible_host=192.168.10.51 vagrant_mem=8192 vagrant_cpu=1
-#worker2 ansible_host=192.168.10.52 vagrant_mem=8192 vagrant_cpu=1
+[k8s-workers]
+k8sworker1 ansible_host=192.168.10.51 vagrant_mem=8192 vagrant_cpu=1
+#k8sworker2 ansible_host=192.168.10.52 vagrant_mem=8192 vagrant_cpu=1
 
 [k8s:children]
-master
-workers
+k8s-masters
+k8s-workers
+
+##############################################################
+# Openshift VMs
+##############################################################
+[openshift-helpers]
+ocp-helper ansible_host=192.168.10.49 vagrant_mem=4096 vagrant_cpu=2
+
+[openshift-bootstraps]
+ocp-bootstrap ansible_host=192.168.10.50 vagrant_mem=4096 vagrant_cpu=2 mac_address="52:54:00:7d:2d:10"
+
+[openshift-masters]
+ocp-master1 ansible_host=192.168.10.51 vagrant_mem=4096 vagrant_cpu=2 mac_address="52:54:00:7d:2d:11"
+
+[openshift-workers]
+ocp-worker1 ansible_host=192.168.10.52 vagrant_mem=8192 vagrant_cpu=1 mac_address="52:54:00:7d:2d:12"
+
+[openshift:children]
+openshift-bootstraps
+openshift-masters
+openshift-workers
 
 ##############################################################
 # Openstack VMs
 ##############################################################
-[control]
-controlnode ansible_host=192.168.10.10 vagrant_mem=8096 vagrant_cpu=2
+[ostack-control]
+oscontrol ansible_host=192.168.10.10 vagrant_mem=8096 vagrant_cpu=2
 
-[network]
-networknode ansible_host=192.168.10.11 vagrant_mem=2048 vagrant_cpu=1
+[ostack-network]
+osnetwork ansible_host=192.168.10.11 vagrant_mem=2048 vagrant_cpu=1
 
-[compute]
-computenode1 ansible_host=192.168.10.12 vagrant_mem=8192 vagrant_cpu=1
-#computenode2 ansible_host=192.168.10.13 vagrant_mem=8192 vagrant_cpu=1
+[ostack-compute]
+oscompute1 ansible_host=192.168.10.12 vagrant_mem=8192 vagrant_cpu=1
+#oscompute2 ansible_host=192.168.10.13 vagrant_mem=8192 vagrant_cpu=1
 
 [openstack:children]
-control
-network
-compute
+ostack-control
+ostack-network
+ostack-compute
 
 [openstack:vars]
 public_interface=eth1
@@ -51,6 +71,7 @@ public_interface=eth1
 [datacentre:children]
 underlay
 openstack
+openshift
 k8s
 aio
 

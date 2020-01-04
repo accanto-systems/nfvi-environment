@@ -1,6 +1,0 @@
-TYPE=Ethernet
-BOOTPROTO=none
-DEVICE=eth3
-ONBOOT=yes
-MASTER=bond0
-SLAVE=yes

@@ -1,22 +1,15 @@
 --- 
-- hosts: underlay
-  gather_facts: no
-  become: yes
-  vars_files:
-    - variables.yaml
-  tasks:
-    - import_role:
-        name: underlay
-    - import_role:
-        name: vagrant
-    - import_role:
-        name: openvpn
-      when: install_openvpn == true
+
+- name: Include underlay playbook
+  import_playbook: underlay/setup-underlay.yaml
 
 - name: Include k8s playbook
-  import_playbook: setup-k8s.yaml
+  import_playbook: kubeadm/setup-k8s.yaml
   when: kubernetes_install == true and hostvars['basehost']['kubernetes_running'] == false
 
 - name: Include openstack playbook
-  import_playbook: setup-openstack.yaml
+  import_playbook: openstack/setup-openstack.yaml
   when: openstack_install == true and hostvars['basehost']['openstack_running'] == false
+
+- name: Include openshift playbook
+  import_playbook: openshift/setup-openshift.yaml
