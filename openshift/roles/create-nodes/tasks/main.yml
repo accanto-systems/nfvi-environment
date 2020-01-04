@@ -1,0 +1,39 @@
+- name: check if master node is already up
+  wait_for:
+    port: 22
+    host: "{{ hostvars['ocp-master1']['ansible_host'] }}"
+    delay: 5
+    timeout: 10
+    msg: "Timeout waiting for 22 to respond"
+  register: port_check
+  ignore_errors: yes
+ 
+- set_fact: 
+    nodes_running: "{{ True if port_check.failed == False else False }}"
+
+- name: create ocp vagrant dir
+  when: port_check.failed == true
+  file:
+    path: /opt/ocp-nodes
+    state: directory
+    mode: '0777'
+
+- name: copy ocp nodes vagrant file
+  when: port_check.failed == true
+  template: 
+    src: ocp.vagrant
+    dest: /opt/ocp-nodes/Vagrantfile
+    mode: 0777
+
+- name: create openshift node VMs with vagrant - this may take some time
+  when: port_check.failed == true
+  command: vagrant up
+  args:
+    chdir: /opt/ocp-nodes
+
+- name: Wait for port 22
+  when: port_check.failed == true
+  wait_for:
+    port: 22
+    host: "{{ hostvars['ocp-master1']['ansible_host'] }}"
+    delay: 10

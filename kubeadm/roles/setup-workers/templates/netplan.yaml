@@ -1,0 +1,16 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth2:
+      dhcp4: no
+    eth3:
+      dhcp4: no
+  bonds:
+    bond0:
+      interfaces:
+        - eth2
+        - eth3
+      parameters:
+        mode: active-backup
+        primary: eth2

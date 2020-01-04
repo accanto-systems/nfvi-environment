@@ -1,0 +1,15 @@
+host_id: "{{ ansible_hostname }}"
+analyzers: 
+  - "{{ hostvars['basehost']['ansible_default_ipv4']['address'] }}:8082"
+agent:
+  listen: 0.0.0.0:8081
+  topology:
+    probes:
+      - netns
+      - netlink
+      - ovsdb
+      - neutron
+      - libvirt
+  flow:
+    probes:
+      - ovssflow

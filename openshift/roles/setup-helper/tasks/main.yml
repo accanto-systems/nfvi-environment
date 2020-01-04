@@ -1,0 +1,17 @@
+- name: install packages
+  import_tasks: "install-pkgs.yml"
+
+- name: configure firewall
+  import_tasks: "configure-firewall.yml"
+
+- name: configure selinux
+  import_tasks: "configure-selinux.yml"
+
+- name: configure http
+  import_tasks: "configure-http.yml"
+
+- name: configure pxes
+  import_tasks: "configure-pxe.yml"
+
+- name: configure ocpcli
+  import_tasks: "configure-ocpli.yml"

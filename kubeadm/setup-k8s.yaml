@@ -1,0 +1,19 @@
+--- 
+
+- hosts: basehost
+  gather_facts: no
+  become: yes
+  tasks:
+    - import_role:
+        name: create-nodes
+
+- hosts: k8s
+  gather_facts: yes
+  become: yes
+  tasks:
+    - import_role:
+        name: setup-workers
+    - import_role:
+        name: setup-docker
+    - import_role:
+        name: configure-kubeadm

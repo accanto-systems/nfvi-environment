@@ -1,0 +1,20 @@
+- name: check if skydive exists
+  stat:
+    path: /opt/skydive
+  register: skydive_result
+
+- name: download skydive release
+  get_url: 
+    url:  "{{ skydive_url }}"
+    dest: /opt/skydive
+    mode: 0777
+  when: skydive_result.stat.exists == False 
+
+- name: cp skydive configuration file
+  template:
+    src: "skydive.node.yml"
+    dest: /opt/skydive.yml
+    mode: 0644
+
+- name: run skydive agents on devstack nodes
+  raw: nohup /opt/skydive --conf /opt/skydive.yml agent < /dev/null > /dev/null 2>&1 & sleep 5

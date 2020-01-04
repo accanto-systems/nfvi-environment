@@ -1,0 +1,54 @@
+---
+rhel8_pkgs:
+  - dhcp-server
+  - tftp-server
+  - syslinux
+  - httpd
+  - haproxy.x86_64
+  - wget
+  - vim
+
+rhel7_pkgs:
+  - dhcp
+  - tftp-server
+  - syslinux
+  - httpd
+  - haproxy.x86_64
+  - wget
+  - vim
+
+allowed_services:
+    - dhcp
+    - tftp
+    - tftp-client
+    - http
+    - https
+    - dns
+    
+allowed_ports:
+    - 6443/tcp
+    - 22623/tcp
+    - 8080/tcp
+    - 32700/tcp
+
+allowed_http_port_t:
+    - 22623
+    - 6443
+    - 32700 
+    - 5001
+    - 5002
+    - 5003
+    - 5004
+
+rhcos_biosimg_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.1/latest/rhcos-4.1.0-x86_64-metal-bios.raw.gz
+rhcos_uefiimg_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.1/latest/rhcos-4.1.0-x86_64-metal-uefi.raw.gz
+images_directory: /var/www/html/openshift4/images/
+ignitions_directory: /var/www/html/openshift4/{{ openshift_version }}/ignitions/
+
+pxe_image_directory: /var/lib/tftpboot/openshift4/4.2.0
+pxe_boot_direcotry: /var/lib/tftpboot/pxelinux.cfg
+rhcos_kernel_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.2/latest/rhcos-4.2.0-x86_64-installer-kernel
+rhcos_initramfs_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.2/latest/rhcos-4.2.0-x86_64-installer-initramfs.img
+
+oc_install_url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ openshift_version }}/openshift-install-linux-{{ openshift_version }}.tar.gz
+oc_client_url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ openshift_version }}/openshift-client-linux-{{ openshift_version }}.tar.gz

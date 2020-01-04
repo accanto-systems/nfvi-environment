@@ -1,0 +1,20 @@
+analyzer:
+  listen: 0.0.0.0:8082
+  topology:
+    fabric:
+{% if openstack_install == True %}
+{% for host in groups['ostack-network'] %}
+    - TOR[Name=tor] -> TOR_PORT1[Name={{host}}, MTU=1500]
+    - TOR_PORT1 -> *[Type=host, Name={{host}}]/bond0
+{% endfor %}
+{% for host in groups['ostack-compute'] %}
+    - TOR[Name=tor] -> TOR_PORT{{loop.index+1}}[Name={{host}}, MTU=1500]
+    - TOR_PORT{{loop.index+1}} -> *[Type=host, Name={{host}}]/bond0
+{% endfor %}
+{% endif %}
+{% if kubernetes_install == True %}
+{% for host in groups['k8s-workers'] %}
+    - TOR[Name=tor] -> TOR_PORT{{loop.index+1+groups['compute']|length}}[Name={{host}}, MTU=1500]
+    - TOR_PORT{{loop.index+1+groups['compute']|length}} -> *[Type=host, Name={{host}}]/bond0
+{% endfor %}
+{% endif %}

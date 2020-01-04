@@ -1,0 +1,20 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: internal
+spec:
+  config: '{
+            "name": "internal",
+            "type": "bridge",
+            "bridge": "br-internal",
+            "isDefaultGateway": true,
+            "forceAddress": false,
+            "ipMasq": true,
+            "hairpinMode": true,
+            "ipam": {
+              "type": "host-local",
+              "subnet": "10.0.20.0/24",
+              "rangeStart": "10.0.20.55",
+              "rangeEnd": "10.0.20.100"
+            }
+        }'

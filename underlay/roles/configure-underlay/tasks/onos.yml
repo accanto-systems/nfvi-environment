@@ -1,0 +1,93 @@
+- name: install java
+  apt: 
+    name: openjdk-8-jre
+
+- name: check if onos already exists
+  stat:
+    path: /opt/{{ onos_filename }}
+  register: onos_tar_result
+
+- name: make /opt directory tree writeable
+  file:
+    path: /opt
+    mode: 0777
+  when: onos_tar_result.stat.exists == False 
+
+- name: download onos
+  get_url: 
+    url: "{{ onos_base_url }}/{{ onos_filename }}"
+    dest: /opt/
+    mode: 0744
+  when: onos_tar_result.stat.exists == False 
+
+- name: check if onos already exists
+  stat:
+    path: /opt/onos
+  register: onos_result
+
+- name: unarchive onos
+  unarchive: 
+    src: /opt/{{ onos_filename }}
+    dest: /opt/
+    remote_src: yes
+  when: onos_result.stat.exists == False 
+
+- name: change onos directory name
+  command: mv /opt/{{ onos_filename.split(".")[0] }} /opt/onos
+  when: onos_result.stat.exists == False 
+
+- name: copy onos service files
+  copy: remote_src=True src={{ item.src }} dest={{ item.dest }} mode=0777
+  with_items:
+    - { src: '/opt/onos/init/onos.initd', dest: '/etc/init.d/onos' }
+    - { src: '/opt/onos/init/onos.service', dest: '/etc/systemd/system/onos.service' }
+  when: onos_result.stat.exists == False 
+
+- name: reload systemd
+  command: systemctl daemon-reload
+  when: onos_result.stat.exists == False 
+
+- name: enable onos service
+  systemd:
+    name: onos
+    enabled: yes
+    masked: no
+  when: onos_result.stat.exists == False 
+
+- name: start service onos
+  service:
+    name: onos
+    state: started
+
+- name: wait for onos
+  wait_for:
+    port: 8181
+    delay: 10
+
+- name: activate openflow module
+  command: "./onos-app localhost activate org.onosproject.openflow"
+  args:
+    chdir: /opt/onos/bin
+  register: result
+  until: result.stdout.find("ACTIVE") != -1
+  retries: 5
+  delay: 15
+
+- name: activate reactve forwarding module
+  command: "./onos-app localhost activate org.onosproject.fwd"
+  args:
+    chdir: /opt/onos/bin
+  register: result
+  until: result.stdout.find("ACTIVE") != -1
+  retries: 50
+  delay: 15
+
+- name: activate openflow module
+  command: "./onos-app localhost activate org.onosproject.vpls"
+  args:
+    chdir: /opt/onos/bin
+  register: result
+  until: result.stdout.find("ACTIVE") != -1
+  retries: 5
+  delay: 15
+
