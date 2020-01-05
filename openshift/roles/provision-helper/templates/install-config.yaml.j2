@@ -7,7 +7,7 @@ compute:
 controlPlane:
   hyperthreading: Enabled
   name: master
-  replicas: {{ groups['ocp4_master_vm'] | length - 1 }}
+  replicas: {{ groups['openshift-masters'] | length - 1 }}
 metadata:
   name: {{ openshift_domain }}
 networking:

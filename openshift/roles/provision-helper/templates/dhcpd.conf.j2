@@ -14,18 +14,18 @@ subnet {{ dhcp_network }} netmask {{ dhcp_netmask }} {
         option ntp-servers {{ dhcp_options_ntp_server }};
         option domain-search {{ dhcp_options_dns_search }};
         filename "pxelinux.0";
-        {% for vm in groups['helper_vm'] %}
-        next-server {{ hostvars[vm].vm_ipaddress }};
+        {% for vm in groups['openshift-helpers'] %}
+        next-server {{ hostvars[vm].ansible_host }};
         {% endfor %} 
-        {% for vm in groups['ocp4_master_vm'] %}
-          {% if vm not in groups['ocp4_bootstrap_vm'] %}
-            host {{ vm }} { hardware ethernet {{ hostvars[vm].vm_macaddress }}; fixed-address {{ hostvars[vm].vm_ipaddress }}; option host-name "{{ vm.split('.')[0] }}"; }
+        {% for vm in groups['openshift-masters'] %}
+          {% if vm not in groups['openshift-bootstraps'] %}
+            host {{ vm }} { hardware ethernet {{ hostvars[vm].mac_address }}; fixed-address {{ hostvars[vm].ansible_host }}; option host-name "{{ vm }}"; }
           {% endif %}
         {% endfor %} 
-        {% for vm in groups['ocp4_bootstrap_vm'] %}
-          host {{ vm }} { hardware ethernet {{ hostvars[vm].vm_macaddress }}; fixed-address {{ hostvars[vm].vm_ipaddress }}; option host-name "{{ vm.split('.')[0] }}"; }
+        {% for vm in groups['openshift-bootstraps'] %}
+          host {{ vm }} { hardware ethernet {{ hostvars[vm].mac_address }}; fixed-address {{ hostvars[vm].ansible_host }}; option host-name "{{ vm }}"; }
         {% endfor %}
-        {% for vm in groups['ocp4_worker_vm'] %}
-          host {{ vm }} { hardware ethernet {{ hostvars[vm].vm_macaddress }}; fixed-address {{ hostvars[vm].vm_ipaddress }}; option host-name "{{ vm.split('.')[0] }}"; }
+        {% for vm in groups['openshift-workers'] %}
+          host {{ vm }} { hardware ethernet {{ hostvars[vm].mac_address }}; fixed-address {{ hostvars[vm].ansible_host }}; option host-name "{{ vm }}"; }
         {% endfor %}
 }

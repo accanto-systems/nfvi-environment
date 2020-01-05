@@ -1,11 +1,12 @@
 - name: load balancer
-  import_tasks: configure-lbconfig.yml
+  import_tasks: configure-lb.yml
 
 - name: dhcp server
   import_tasks: configure-dhcp.yml
 
 - name: ignition files
-  import_tasks: configure-lbconfig.yml
+  import_tasks: configure-ignitionfiles.yml
 
 - name: pxe config
-  import_tasks: configure-lbconfig.yml
+  import_tasks: configure-pxe.yml
+
