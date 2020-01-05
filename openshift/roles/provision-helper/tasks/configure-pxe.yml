@@ -1,0 +1,27 @@
+---
+- name: Update /var/lib/tftpboot/pxelinux.cfg/bootstrap
+  template:
+    src: bootstrap.j2
+    dest: '/var/lib/tftpboot/pxelinux.cfg/01-{{ hostvars[item]["mac_address"] | replace(":", "-") | lower }}'
+  tags:
+      - configure_pxe_server
+      - update_pxe_config
+  with_items: "{{ groups['openshift-bootstraps'] }}"
+
+- name: Update /var/lib/tftpboot/pxelinux.cfg/master
+  template:
+    src: master.j2
+    dest: '/var/lib/tftpboot/pxelinux.cfg/01-{{ hostvars[item]["mac_address"] | replace(":", "-") | lower }}'
+  tags:
+      - configure_pxe_server
+      - update_pxe_config
+  with_items: "{{ groups['openshift-masters'] }}"
+
+- name: Update /var/lib/tftpboot/pxelinux.cfg/worker
+  template:
+    src: worker.j2
+    dest: '/var/lib/tftpboot/pxelinux.cfg/01-{{ hostvars[item]["mac_address"] | replace(":", "-") | lower }}'
+  tags:
+      - configure_pxe_server
+      - update_pxe_config
+  with_items: "{{ groups['openshift-workers'] }}"
