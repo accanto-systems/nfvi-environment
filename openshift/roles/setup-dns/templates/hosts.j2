@@ -1,6 +1,6 @@
-{{ hostvars['ocp-bootstrap'].ansible_host }} ocp-bootstrap.mycluster.example.com
-{{ hostvars['ocp-helper'].ansible_host }} loadbalancer.mycluster.example.com  api.mycluster.example.com  api-int.mycluster.example.com
-{{ hostvars['ocp-master'].ansible_host }} ocp-master.mycluster.example.com  etcd-0.mycluster.example.com
+{{ hostvars['ocp-bootstrap'].ansible_host }} ocp-bootstrap.{{ openshift_domain }}.{{ network_domain }}
+{{ hostvars['ocp-helper'].ansible_host }} loadbalancer.{{ openshift_domain }}.{{ network_domain }}  api.{{ openshift_domain }}.{{ network_domain }}  api-int.{{ openshift_domain }}.{{ network_domain }}
+{{ hostvars['ocp-master'].ansible_host }} ocp-master.{{ openshift_domain }}.{{ network_domain }}  etcd-0.{{ openshift_domain }}.{{ network_domain }}
 {% for vm in groups['openshift-workers'] %}
-{{ hostvars[vm].ansible_host }} {{ vm }}
+{{ hostvars[vm].ansible_host }}  {{ vm }}  {{ vm }}.{{ openshift_domain }}.{{ network_domain }}
 {% endfor %}
