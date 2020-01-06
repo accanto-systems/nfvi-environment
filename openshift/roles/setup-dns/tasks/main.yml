@@ -1,0 +1,21 @@
+- name: install dnsmasq
+  apt:
+    name: dnsmasq
+    state: present
+
+- name: write dnsmasq conf template
+  template:
+    src: dnsmasq.conf
+    dest: /etc/dnsmasq.conf  
+
+- name: write etc hosts file
+  blockinfile:
+    block: "{{ lookup('template', 'hosts.j2') }}"
+    dest: /etc/hosts
+    backup: yes
+
+- name: restart dnsmasq
+  service: 
+    name: dnsmasq
+    state: restarted
+

@@ -10,7 +10,7 @@
 
 - name: Prepare & Configure Helper Node
   become: true
-  hosts: ocp-helper
+  hosts: openshift-helpers
   gather_facts: true
   roles:
    - setup-helper

@@ -1,0 +1,6 @@
+{{ hostvars['ocp-bootstrap'].ansible_host }} ocp-bootstrap.mycluster.example.com
+{{ hostvars['ocp-helper'].ansible_host }} loadbalancer.mycluster.example.com  api.mycluster.example.com  api-int.mycluster.example.com
+{{ hostvars['ocp-master'].ansible_host }} ocp-master.mycluster.example.com  etcd-0.mycluster.example.com
+{% for vm in groups['openshift-workers'] %}
+{{ hostvars[vm].ansible_host }} {{ vm }}
+{% endfor %}
