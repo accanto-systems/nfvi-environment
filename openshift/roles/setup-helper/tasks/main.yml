@@ -14,4 +14,7 @@
   import_tasks: "configure-pxe.yml"
 
 - name: configure ocpcli
-  import_tasks: "configure-ocpli.yml"
+  import_tasks: "configure-ocpcli.yml"
+
+- name: configure hosts
+  import_tasks: "configure-hosts.yml"

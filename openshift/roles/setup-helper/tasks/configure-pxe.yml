@@ -7,7 +7,7 @@
     - configure_pxe_server
   with_items:
     - "{{ pxe_image_directory }}"
-    - "{{ pxe_boot_direcotry }}"
+    - "{{ pxe_boot_directory }}"
 
 - name: Downloading RHCOS 4.2.0 initram
   get_url:
@@ -40,7 +40,7 @@
       - configure_pxe_server
   with_items:
     - "{{ pxe_image_directory }}"
-    - "{{ pxe_boot_direcotry }}"
+    - "{{ pxe_boot_directory }}"
 
 - name: start tftp
   service:

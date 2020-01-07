@@ -34,7 +34,7 @@
 
 - name: Ensure web hosting directory exists
   file:
-    path: /var/www/html/openshift4/{{ openshift_version }}/ignitions/
+    path: /var/www/html/
     state: directory
     owner: apache
     group: root
@@ -42,7 +42,7 @@
     - configure_ignitions_file
  
 - name: Copy ign file to http hosted folder
-  shell: cp -rvf ~/ocp4/*.ign /var/www/html/openshift4/{{ openshift_version }}/ignitions/
+  shell: cp -rvf /opt/ocp4/*.ign /var/www/html/
   tags: 
     - configure_ignitions_file
 

@@ -1,4 +1,9 @@
 ---
+- name: Start firewalld service
+  service:
+    name: firewalld
+    state: started
+
 - name: Allowing firewall rules for services
   firewalld:
     service: "{{ item }}"

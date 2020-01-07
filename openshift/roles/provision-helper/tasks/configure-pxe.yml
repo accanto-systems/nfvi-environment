@@ -1,4 +1,5 @@
 ---
+
 - name: Update /var/lib/tftpboot/pxelinux.cfg/bootstrap
   template:
     src: bootstrap.j2
@@ -6,7 +7,7 @@
   tags:
       - configure_pxe_server
       - update_pxe_config
-  with_items: "{{ groups['openshift-bootstraps'] }}"
+  with_items: "{{ groups['openshift_bootstraps'] }}"
 
 - name: Update /var/lib/tftpboot/pxelinux.cfg/master
   template:
@@ -15,7 +16,7 @@
   tags:
       - configure_pxe_server
       - update_pxe_config
-  with_items: "{{ groups['openshift-masters'] }}"
+  with_items: "{{ groups['openshift_masters'] }}"
 
 - name: Update /var/lib/tftpboot/pxelinux.cfg/worker
   template:
@@ -24,4 +25,4 @@
   tags:
       - configure_pxe_server
       - update_pxe_config
-  with_items: "{{ groups['openshift-workers'] }}"
+  with_items: "{{ groups['openshift_workers'] }}"
