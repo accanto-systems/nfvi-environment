@@ -15,7 +15,7 @@
 
 - name: download onos
   get_url: 
-    url: "{{ onos_base_url }}/{{ onos_filename }}"
+    url: "{{ onos_url }}/{{ onos_filename }}"
     dest: /opt/
     mode: 0744
   when: onos_tar_result.stat.exists == False 
@@ -25,15 +25,18 @@
     path: /opt/onos
   register: onos_result
 
+- name: create /opt/onos
+  file:
+    name: /opt/onos
+    state: directory
+  when: onos_result.stat.exists == False 
+
 - name: unarchive onos
   unarchive: 
     src: /opt/{{ onos_filename }}
-    dest: /opt/
+    dest: /opt/onos
     remote_src: yes
-  when: onos_result.stat.exists == False 
-
-- name: change onos directory name
-  command: mv /opt/{{ onos_filename.split(".")[0] }} /opt/onos
+    extra_opts: [--strip-components=1]
   when: onos_result.stat.exists == False 
 
 - name: copy onos service files
