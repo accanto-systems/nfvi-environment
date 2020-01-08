@@ -1,5 +1,0 @@
-- name: destroy helper VM me
-  command: vagrant destroy -f
-  args:
-    chdir: /opt/ocp-helper
-

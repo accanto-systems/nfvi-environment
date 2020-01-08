@@ -5,8 +5,8 @@
   hosts: basehost
   gather_facts: false
   roles:
-   - create-helper
    - setup-dns
+   - create-helper
 
 - name: Prepare & Configure Helper Node
   become: true
@@ -22,11 +22,3 @@
   gather_facts: false
   roles:
    - create-nodes
-
-# - name: Destroy Helper Node
-#   become: true
-#   hosts: basehost
-#   gather_facts: false
-#   roles:
-#    - destroy-helper
-
