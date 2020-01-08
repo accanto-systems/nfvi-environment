@@ -88,7 +88,7 @@ defaults
  backend machine_config_backend
    balance roundrobin
    mode tcp
-   server ocpbootstrap {{ hostvars['ocpbootstrap'].ansible_host }}:6443 check
+   server ocpbootstrap {{ hostvars['ocpbootstrap'].ansible_host }}:22623 check
    {% for vm in groups['openshift_masters'] %}
    server {{ vm }} {{ hostvars[vm].ansible_host }}:22623 check
    {% endfor %}
