@@ -31,9 +31,12 @@
   args:
     chdir: /opt/ocpnodes
 
-- name: Wait for port 22 on master node
+- name: Wait for openshift bootstrap to complete
   when: port_check.failed == true
-  wait_for:
-    port: 22
-    host: "{{ hostvars['ocpmaster1']['ansible_host'] }}"
-    delay: 10
+  shell: /usr/bin/openshift-install --dir=/opt/ocp4 wait-for bootstrap-complete
+
+# - name: Remove bootstrap node
+#   when: port_check.failed == true
+
+
+# - name: Remove bootstrap from load balancer
