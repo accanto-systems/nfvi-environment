@@ -15,6 +15,3 @@
 
 - name: configure ocpcli
   import_tasks: "configure-ocpcli.yml"
-
-- name: configure hosts
-  import_tasks: "configure-hosts.yml"

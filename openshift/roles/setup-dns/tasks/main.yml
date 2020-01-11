@@ -19,3 +19,8 @@
     name: dnsmasq
     state: restarted
 
+- name: add nameserver to resolv.conf
+  lineinfile: 
+    path: /etc/resolv.conf
+    line: nameserver {{ hostvars['basehost'].ansible_host }}
+    insertbefore: BOF

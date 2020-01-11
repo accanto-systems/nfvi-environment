@@ -1,6 +1,0 @@
----
-- name: write etc hosts file
-  blockinfile:
-    block: "{{ lookup('template', 'hosts.j2') }}"
-    dest: /etc/hosts
-    backup: yes

@@ -1,18 +1,18 @@
 Vagrant.configure(2) do |config|
 
   config.vm.define 'ocphelper' do |nodeconfig|
-    nodeconfig.vm.hostname = 'ocphelper'
+    nodeconfig.vm.hostname = 'ocphelper.mytest.accanto.com'
     nodeconfig.vm.box = 'accanto/rhel7'
     nodeconfig.vm.box_version = "1.0"
     nodeconfig.vm.synced_folder ".", "/vagrant", disabled: true
-    nodeconfig.vm.network :private_network, :ip => "{{ hostvars['ocphelper']['ansible_host'] }}", 
+    nodeconfig.vm.network :private_network, :ip => "{{ hostvars['ocphelper.mytest.accanto.com']['ansible_host'] }}", 
             libvirt__network_name: "helper_managed",
             libvirt__dhcp_enabled: false,
             libvirt__host_ip: '192.168.10.1'
 
     nodeconfig.vm.provider :libvirt do |libvirt|
-      libvirt.cpus = {{ hostvars['ocphelper']['vagrant_cpu'] }}
-      libvirt.memory = {{ hostvars['ocphelper']['vagrant_mem'] }}
+      libvirt.cpus = {{ hostvars['ocphelper.mytest.accanto.com']['vagrant_cpu'] }}
+      libvirt.memory = {{ hostvars['ocphelper.mytest.accanto.com']['vagrant_mem'] }}
     end
   end
 end

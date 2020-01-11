@@ -18,12 +18,12 @@ subnet {{ dhcp_network }} netmask {{ dhcp_netmask }} {
         next-server {{ hostvars[vm].ansible_host }};
 {% endfor %} 
 {% for vm in groups['openshift_masters'] %}
-        host {{ vm }}.{{ openshift_domain }}.{{ network_domain }} { hardware ethernet {{ hostvars[vm].mac_address }}; fixed-address {{ hostvars[vm].ansible_host }}; option host-name "{{ vm }}.{{ openshift_domain }}.{{ network_domain }}"; }
+        host {{ vm }} { hardware ethernet {{ hostvars[vm].mac_address }}; fixed-address {{ hostvars[vm].ansible_host }}; option host-name "{{ vm }}"; }
 {% endfor %} 
 {% for vm in groups['openshift_bootstraps'] %}
-        host {{ vm }}.{{ openshift_domain }}.{{ network_domain }} { hardware ethernet {{ hostvars[vm].mac_address }}; fixed-address {{ hostvars[vm].ansible_host }}; option host-name "{{ vm }}.{{ openshift_domain }}.{{ network_domain }}"; }
+        host {{ vm }} { hardware ethernet {{ hostvars[vm].mac_address }}; fixed-address {{ hostvars[vm].ansible_host }}; option host-name "{{ vm }}"; }
 {% endfor %}
 {% for vm in groups['openshift_workers'] %}
-        host {{ vm }}.{{ openshift_domain }}.{{ network_domain }} { hardware ethernet {{ hostvars[vm].mac_address }}; fixed-address {{ hostvars[vm].ansible_host }}; option host-name "{{ vm }}.{{ openshift_domain }}.{{ network_domain }}"; }
+        host {{ vm }} { hardware ethernet {{ hostvars[vm].mac_address }}; fixed-address {{ hostvars[vm].ansible_host }}; option host-name "{{ vm }}"; }
 {% endfor %}
 }

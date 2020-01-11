@@ -28,16 +28,17 @@ k8sworkers
 # Openshift VMs
 ##############################################################
 [openshift_helpers]
-ocphelper ansible_host=192.168.10.49 vagrant_mem=4096 vagrant_cpu=2
+ocphelper.mytest.accanto.com ansible_host=192.168.10.49 vagrant_mem=2048 vagrant_cpu=1
 
 [openshift_bootstraps]
-ocpbootstrap ansible_host=192.168.10.50 vagrant_mem=4096 vagrant_cpu=2 mac_address="52:54:00:7d:2d:10"
+ocpbootstrap.mytest.accanto.com ansible_host=192.168.10.50 vagrant_mem=4096 vagrant_cpu=2 mac_address="52:54:00:7d:2d:10"
 
 [openshift_masters]
-ocpmaster1 ansible_host=192.168.10.51 vagrant_mem=4096 vagrant_cpu=2 mac_address="52:54:00:7d:2d:11"
+ocpmaster1.mytest.accanto.com ansible_host=192.168.10.51 vagrant_mem=8096 vagrant_cpu=2 mac_address="52:54:00:7d:2d:11"
 
 [openshift_workers]
-ocpworker1 ansible_host=192.168.10.52 vagrant_mem=8192 vagrant_cpu=1 mac_address="52:54:00:7d:2d:12"
+ocpworker1.mytest.accanto.com ansible_host=192.168.10.52 vagrant_mem=4096 vagrant_cpu=1 mac_address="52:54:00:7d:2d:12"
+#ocpworker2.mytest.accanto.com ansible_host=192.168.10.53 vagrant_mem=4096 vagrant_cpu=1 mac_address="52:54:00:7d:2d:13"
 
 [openshift:children]
 underlay

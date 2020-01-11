@@ -1,12 +1,13 @@
-- name: check if master node is already up
+- name: check if master nodes are already up
   wait_for:
     port: 22
-    host: "{{ hostvars['ocpmaster1']['ansible_host'] }}"
+    host: "{{ hostvars[item]['ansible_host'] }}"
     delay: 5
     timeout: 10
     msg: "Timeout waiting for 22 to respond"
   register: port_check
   ignore_errors: yes
+  with_items: "{{ groups['openshift_masters'] }}"
  
 - set_fact: 
     nodes_running: "{{ True if port_check.failed == False else False }}"
@@ -32,11 +33,25 @@
     chdir: /opt/ocpnodes
 
 - name: Wait for openshift bootstrap to complete
+  delegate_to: ocphelper.mytest.accanto.com
   when: port_check.failed == true
   shell: /usr/bin/openshift-install --dir=/opt/ocp4 wait-for bootstrap-complete
 
-# - name: Remove bootstrap node
-#   when: port_check.failed == true
+- name: Remove bootstrap node
+  when: port_check.failed == true
+  command: vagrant destroy ocpbootstrap.mytest.accanto.com -f
+  args:
+    chdir: /opt/ocpnodes
 
+- name: Remove bootstrap from load balancer
+  lineinfile: 
+    dest: /etc/haproxy/haproxy.cfg
+    state: absent
+    regexp: "^*ocpbootstrap*$"
 
-# - name: Remove bootstrap from load balancer
+- name: restart load balancer
+  service:
+    name: haproxy
+    state: restarted
+
+   

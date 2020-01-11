@@ -72,9 +72,11 @@ defaults
  backend k8s_api_backend
    balance roundrobin
    mode tcp
-   server ocpbootstrap {{ hostvars['ocpbootstrap'].ansible_host }}:6443 check
+{% for vm in groups['openshift_bootstraps'] %}
+   server {{ vm }} {{ hostvars[vm].ansible_host }}:6443 check
+{% endfor %}
 {% for vm in groups['openshift_masters'] %}
-   server {{ vm }}.{{ openshift_domain }}.{{ network_domain }} {{ hostvars[vm].ansible_host }}:6443 check
+   server {{ vm }} {{ hostvars[vm].ansible_host }}:6443 check
 {% endfor %}
 
 
@@ -88,9 +90,11 @@ defaults
  backend machine_config_backend
    balance roundrobin
    mode tcp
-   server ocpbootstrap {{ hostvars['ocpbootstrap'].ansible_host }}:22623 check
+{% for vm in groups['openshift_bootstraps'] %}
+   server {{ vm }} {{ hostvars[vm].ansible_host }}:22623 check
+{% endfor %}
 {% for vm in groups['openshift_masters'] %}
-   server {{ vm }}.{{ openshift_domain }}.{{ network_domain }} {{ hostvars[vm].ansible_host }}:22623 check
+   server {{ vm }} {{ hostvars[vm].ansible_host }}:22623 check
 {% endfor %}
 
 
@@ -105,7 +109,7 @@ defaults
    balance roundrobin
    mode tcp
 {% for vm in groups['openshift_workers'] %}
-   server {{ vm }}.{{ openshift_domain }}.{{ network_domain }} {{ hostvars[vm].ansible_host }}:80 check
+   server {{ vm }} {{ hostvars[vm].ansible_host }}:80 check
 {% endfor %}
 
 # ---------------------------------------------------------------------
@@ -119,7 +123,7 @@ defaults
    balance roundrobin
    mode tcp
 {% for vm in groups['openshift_workers'] %}
-   server {{ vm }}.{{ openshift_domain }}.{{ network_domain }} {{ hostvars[vm].ansible_host }}:443 check
+   server {{ vm }} {{ hostvars[vm].ansible_host }}:443 check
 {% endfor %}
 
 # ---------------------------------------------------------------------

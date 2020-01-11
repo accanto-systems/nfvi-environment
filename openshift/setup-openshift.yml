@@ -2,7 +2,7 @@
 
 - name: Create Helper Node and set up DNS
   become: true
-  hosts: basehost
+  hosts: underlay
   gather_facts: false
   roles:
    - setup-dns
@@ -10,7 +10,7 @@
 
 - name: Prepare & Configure Helper Node
   become: true
-  hosts: ocphelper
+  hosts: openshift_helpers
   gather_facts: true
   roles:
   - setup-helper
@@ -18,7 +18,7 @@
 
 - name: Create Openshift Nodes
   become: true
-  hosts: basehost
+  hosts: underlay
   gather_facts: false
   roles:
    - create-nodes

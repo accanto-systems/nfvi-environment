@@ -1,12 +1,13 @@
 - name: check if helper is already up
   wait_for:
     port: 22
-    host: "{{ hostvars['ocphelper']['ansible_host'] }}"
+    host: "{{ hostvars[item]['ansible_host'] }}"
     delay: 5
     timeout: 10
     msg: "Timeout waiting for 22 to respond"
   register: port_check
   ignore_errors: yes
+  with_items: "{{ groups['openshift_helpers'] }}"
  
 - set_fact: 
     helper_running: "{{ True if port_check.failed == False else False }}"
@@ -35,11 +36,26 @@
   when: port_check.failed == true
   wait_for:
     port: 22
-    host: "{{ hostvars['ocphelper']['ansible_host'] }}"
+    host: "{{ hostvars[item]['ansible_host'] }}"
     delay: 10
+  with_items: "{{ groups['openshift_helpers'] }}"
+
+- name: stop NetworkManager
+  delegate_to: ocphelper.mytest.accanto.com
+  service:
+    name: NetworkManager
+    state: stopped
+    enabled: no
+
+- name: add nameserver to resolv.conf
+  delegate_to: ocphelper.mytest.accanto.com
+  lineinfile: 
+    path: /etc/resolv.conf
+    line: nameserver {{ hostvars['basehost'].ansible_host }}
+    insertbefore: BOF
 
 - name: register rhel subscription
-  delegate_to: ocphelper
+  delegate_to: ocphelper.mytest.accanto.com
   redhat_subscription:
     state: present
     username: "{{ subscription_user }}"
@@ -48,26 +64,26 @@
   when: port_check.failed == true
 
 - name: Disable all RHSM repositories
-  delegate_to: ocphelper
+  delegate_to: ocphelper.mytest.accanto.com
   rhsm_repository:
     name: '*'
     state: disabled
   when: port_check.failed == true
 
 - name: Enable rhel 7 server repository
-  delegate_to: ocphelper
+  delegate_to: ocphelper.mytest.accanto.com
   rhsm_repository:
     name: rhel-7-server-rpms
   when: port_check.failed == true
 
 - name: Enable rhel 7 common
-  delegate_to: ocphelper
+  delegate_to: ocphelper.mytest.accanto.com
   rhsm_repository:
     name: rhel-7-server-rh-common-rpms   
   when: port_check.failed == true
 
 - name: Enable extras
-  delegate_to: ocphelper
+  delegate_to: ocphelper.mytest.accanto.com
   rhsm_repository:
     name: rhel-7-server-extras-rpms
   when: port_check.failed == true
