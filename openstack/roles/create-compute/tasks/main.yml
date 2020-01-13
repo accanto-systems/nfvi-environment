@@ -7,7 +7,7 @@
 - name: check if control node is up
   wait_for:
     port: 22
-    host: "{{ hostvars['controlnode']['ansible_host'] }}"
+    host: "{{ hostvars['oscontrol']['ansible_host'] }}"
     delay: 5
     timeout: 10
     msg: "Timeout waiting for 22 to respond"
