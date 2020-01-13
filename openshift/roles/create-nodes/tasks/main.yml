@@ -48,7 +48,7 @@
   lineinfile: 
     dest: /etc/haproxy/haproxy.cfg
     state: absent
-    regexp: "^*ocpbootstrap*$"
+    regexp: "^   server ocpbootstrap*"
 
 - name: restart load balancer
   delegate_to: ocphelper.mytest.accanto.com
@@ -56,4 +56,7 @@
     name: haproxy
     state: restarted
 
-   
+- name: wait for installation to complete
+  delegate_to: ocphelper.mytest.accanto.com
+  when: port_check.failed == true
+  shell: /usr/bin/openshift-install --dir=/opt/ocp4 wait-for install-complete
