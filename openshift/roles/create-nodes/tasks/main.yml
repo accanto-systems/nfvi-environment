@@ -44,12 +44,14 @@
     chdir: /opt/ocpnodes
 
 - name: Remove bootstrap from load balancer
+  delegate_to: ocphelper.mytest.accanto.com
   lineinfile: 
     dest: /etc/haproxy/haproxy.cfg
     state: absent
     regexp: "^*ocpbootstrap*$"
 
 - name: restart load balancer
+  delegate_to: ocphelper.mytest.accanto.com
   service:
     name: haproxy
     state: restarted

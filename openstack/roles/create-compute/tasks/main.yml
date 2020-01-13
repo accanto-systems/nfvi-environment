@@ -1,6 +1,10 @@
+- name: ensure underlay is enabled
+  fail:
+    msg: Underlay must be enabled to setup Openstack.
+  when: install_underlay != True
+
 # install openstack vms
 - name: check if control node is up
-  when: openstack_install == true
   wait_for:
     port: 22
     host: "{{ hostvars['controlnode']['ansible_host'] }}"
@@ -12,31 +16,30 @@
 
 - set_fact: 
     openstack_running: "{{ true if port_check.failed == false else false }}"
-  when: openstack_install == true 
 
 - name: create openstack vagrant dir
-  when: openstack_install == true and port_check.failed == true
+  when: port_check.failed == true
   file:
     path: /opt/openstack
     state: directory
     mode: '0777'
 
 - name: copy openstack vagrant file
-  when: openstack_install == true and port_check.failed == true
+  when: port_check.failed == true
   template: 
     src: openstack.vagrant
     dest: /opt/openstack/Vagrantfile
     mode: 0777
 
 - name: create openstack VMs with vagrant - this may take some time
-  when: openstack_install == true and port_check.failed == true
+  when: port_check.failed == true
   command: vagrant up
   args:
     chdir: /opt/openstack
 
 # test that ssh is running on control node
 - name: Wait for port 22 to become open
-  when: openstack_install == true and port_check.failed == true
+  when: port_check.failed == true
   wait_for:
     port: 22
     host: "{{ hostvars[item]['ansible_host'] }}"

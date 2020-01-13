@@ -2,8 +2,6 @@
 - hosts: openstack
   gather_facts: no
   become: yes
-  vars_files:
-    - variables.yaml
   tasks:
     - name: unregister subscription from openstack nodes
       redhat_subscription:
@@ -11,50 +9,63 @@
         username: "{{ subscription_user }}"
         password: "{{ subscription_password }}"
         pool_ids: "{{ openstack_pool_id }}"
-      when: openstack_install == true and openstack_offical_redhat == true
+      when: install_openstack == true and openstack_offical_redhat == true
 
 - hosts: underlay
   gather_facts: no
   become: yes
-  vars_files:
-    - variables.yaml
   tasks:
+    - name: destroy openshift nodes
+      when: install_openshift == true
+      command: vagrant destroy -f
+      args:
+        chdir: /opt/ocpnodes
+
+    - name: destroy openshift helper
+      when: install_openshift == true
+      command: vagrant destroy -f
+      args:
+        chdir: /opt/ocphelper
 
     - name: destroy openstack
-      when: openstack_install == true
+      when: install_openstack == true
       command: vagrant destroy -f
       args:
         chdir: /opt/openstack
 
     - name: destroy k8s
-      when: kubernetes_install == true
+      when: install_kubeadm == true
       command: vagrant destroy -f
       args:
         chdir: /opt/k8s
 
     - name: destroy LM AIO
-      when: AIO_VM == true
+      when: install_aio == true
       command: vagrant destroy -f
       args:
         chdir: /opt/lm
 
     - name: kill mininet
+      when: install_underlay == true
       uri:
         url: http://localhost:5000/exit
       ignore_errors: yes
       
     - name: stop onos
+      when: install_underlay == true
       service:
         name: onos
         state: stopped
 
     - name: disable onos
+      when: install_underlay == true
       systemd:
         name: onos
         enabled: no
         masked: no
 
     - name: clean onos directory
+      when: install_underlay == true
       file:
         path: /opt/onos
         state: absent
@@ -67,5 +78,6 @@
         enabled: no
 
     - name: kill skydive
+      when: install_underlay == true
       command: pkill skydive
       when: install_skydive == True

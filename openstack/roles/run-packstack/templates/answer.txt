@@ -23,23 +23,23 @@ EXCLUDE_SERVERS=
 
 CONFIG_DEBUG_MODE=n
 
-CONFIG_CONTROLLER_HOST={{ hostvars['controlnode']['ansible_host'] }}
-CONFIG_COMPUTE_HOSTS={% for arg in groups['compute'] %}{{ hostvars[arg]['ansible_host'] }}{% if not loop.last %},{% endif %} {% endfor %} 
-CONFIG_NETWORK_HOSTS={{ hostvars['networknode']['ansible_host'] }}
-CONFIG_STORAGE_HOST={{ hostvars['controlnode']['ansible_host'] }}
-CONFIG_SAHARA_HOST={{ hostvars['controlnode']['ansible_host'] }}
-CONFIG_AMQP_HOST={{ hostvars['controlnode']['ansible_host'] }}
-CONFIG_MARIADB_HOST={{ hostvars['controlnode']['ansible_host'] }}
+CONFIG_CONTROLLER_HOST={{ hostvars['oscontrol']['ansible_host'] }}
+CONFIG_ostack_compute_HOSTS={% for arg in groups['ostack_compute'] %}{{ hostvars[arg]['ansible_host'] }}{% if not loop.last %},{% endif %} {% endfor %} 
+CONFIG_NETWORK_HOSTS={{ hostvars['osnetwork']['ansible_host'] }}
+CONFIG_STORAGE_HOST={{ hostvars['oscontrol']['ansible_host'] }}
+CONFIG_SAHARA_HOST={{ hostvars['oscontrol']['ansible_host'] }}
+CONFIG_AMQP_HOST={{ hostvars['oscontrol']['ansible_host'] }}
+CONFIG_MARIADB_HOST={{ hostvars['oscontrol']['ansible_host'] }}
 
 CONFIG_KEYSTONE_REGION=RegionOne
 CONFIG_KEYSTONE_ADMIN_USERNAME=admin
 CONFIG_KEYSTONE_ADMIN_PW=password
 CONFIG_KEYSTONE_DEMO_PW=password
-CONFIG_KEYSTONE_LDAP_URL=ldap://{{ hostvars['controlnode']['ansible_host'] }}
+CONFIG_KEYSTONE_LDAP_URL=ldap://{{ hostvars['oscontrol']['ansible_host'] }}
 
 CONFIG_CINDER_VOLUMES_SIZE=50G
 
-CONFIG_NOVA_VNCPROXY_HOST={{ hostvars['controlnode']['ansible_host'] }}
+CONFIG_NOVA_VNCPROXY_HOST={{ hostvars['oscontrol']['ansible_host'] }}
 
 CONFIG_NOVA_LIBVIRT_VIRT_TYPE=kvm
 
@@ -110,14 +110,14 @@ CONFIG_NEUTRON_OVS_BRIDGE_MAPPINGS=extnet:br-ex,provider:br-vlan
 CONFIG_NEUTRON_OVS_BRIDGE_IFACES=br-ex:eth5,br-vlan:bond0
 
 # Comma-separated list of Open vSwitch bridges that must be created
-# and connected to interfaces in compute nodes when flat or vlan type
+# and connected to interfaces in ostack_compute nodes when flat or vlan type
 # drivers are enabled. These bridges must exist in
 # CONFIG_NEUTRON_OVS_BRIDGE_MAPPINGS and
 # CONFIG_NEUTRON_OVS_BRIDGE_IFACES. Example: --os-neutron-ovs-bridges-
-# compute=br-vlan --os-neutron-ovs-bridge-mappings="extnet:br-
+# ostack_compute=br-vlan --os-neutron-ovs-bridge-mappings="extnet:br-
 # ex,physnet1:br-vlan" --os-neutron-ovs-bridge-interfaces="br-ex:eth1
 # ,br-vlan:eth2"
-CONFIG_NEUTRON_OVS_BRIDGES_COMPUTE=br-vlan
+CONFIG_NEUTRON_OVS_BRIDGES_ostack_compute=br-vlan
 
 # Name of physical network used for external network when enabling
 # CONFIG_PROVISION_DEMO. Name must be one of the included in

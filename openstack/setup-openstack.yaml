@@ -14,7 +14,7 @@
     - import_role:
         name: setup-compute
 
-- hosts: control
+- hosts: ostack_control
   gather_facts: yes
   become: yes
   tasks:

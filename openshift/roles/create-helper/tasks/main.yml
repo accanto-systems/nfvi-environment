@@ -40,20 +40,6 @@
     delay: 10
   with_items: "{{ groups['openshift_helpers'] }}"
 
-- name: stop NetworkManager
-  delegate_to: ocphelper.mytest.accanto.com
-  service:
-    name: NetworkManager
-    state: stopped
-    enabled: no
-
-- name: add nameserver to resolv.conf
-  delegate_to: ocphelper.mytest.accanto.com
-  lineinfile: 
-    path: /etc/resolv.conf
-    line: nameserver {{ hostvars['basehost'].ansible_host }}
-    insertbefore: BOF
-
 - name: register rhel subscription
   delegate_to: ocphelper.mytest.accanto.com
   redhat_subscription:

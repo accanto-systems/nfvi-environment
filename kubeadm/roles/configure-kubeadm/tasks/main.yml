@@ -1,7 +1,7 @@
 - import_tasks: install.yml
 
 - import_tasks: start.yml
-  when: inventory_hostname in groups.master
+  when: inventory_hostname in groups.k8smasters
 
 - import_tasks: start-worker.yml
-  when: inventory_hostname in groups.workers
+  when: inventory_hostname in groups.k8sworkers

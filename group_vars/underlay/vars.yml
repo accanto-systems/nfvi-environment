@@ -1,1 +1,31 @@
 ---
+
+
+###############################################
+# Host bridge configuration
+###############################################
+openstack_bridge_ip: "172.24.4.1"
+
+###############################################
+# Skydive
+###############################################
+skydive_url: https://github.com/skydive-project/skydive/releases/download/v0.23.0/skydive
+
+###############################################
+# Onos
+###############################################
+onos_url: http://repo1.maven.org/maven2/org/onosproject/onos-releases/2.1.0
+onos_filename: onos-2.1.0.tar.gz
+
+###############################################
+# OpenVPN
+###############################################
+openvpn_port: 1194
+# change this to the public IP address or domain name of the bare metal Ubuntu server
+openvpn_public_ip: 10.0.0.1
+
+###############################################
+# Vagrant
+###############################################
+vagrant_url: https://releases.hashicorp.com/vagrant/2.2.6/
+vagrant_deb_file: vagrant_2.2.6_x86_64.deb

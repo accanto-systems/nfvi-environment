@@ -3,8 +3,8 @@
 - import_tasks: ./setup-node-keys.yaml
 
 - import_tasks: ./nicbond.yaml
-  when: inventory_hostname in groups.workers
+  when: inventory_hostname in groups.k8sworkers
 
 - import_tasks: ./skydive.yaml
-  when: inventory_hostname in groups.workers and install_skydive == true
+  when: inventory_hostname in groups.k8sworkers and install_skydive == true
 

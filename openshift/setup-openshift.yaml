@@ -5,8 +5,8 @@
   hosts: underlay
   gather_facts: false
   roles:
-   - setup-dns
    - create-helper
+   - setup-dns
 
 - name: Prepare & Configure Helper Node
   become: true

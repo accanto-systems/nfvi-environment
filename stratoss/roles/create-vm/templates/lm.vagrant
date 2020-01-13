@@ -1,8 +1,10 @@
+{% if install_underlay == True %}
 $script = <<-SCRIPT
 ifconfig eth2 0
 ip link add link eth2 name eth2.5 type vlan id 5
 ifconfig eth2.5 10.0.30.5
 SCRIPT
+{% endif %}
 
 Vagrant.configure(2) do |config|
 
@@ -12,7 +14,9 @@ Vagrant.configure(2) do |config|
     nodeconfig.vm.box_version = "1.0"
     nodeconfig.vm.synced_folder ".", "/vagrant", disabled: true
     nodeconfig.vm.network :private_network, :ip => "{{ hostvars['lm']['ansible_host'] }}"
+{% if install_underlay == True %}
     nodeconfig.vm.network 'public_network', dev: 's1', type: 'bridge', mode: 'bridge', :ovs => true, ip: '10.0.30.5'
+{% endif %}
 
     nodeconfig.vm.provider :libvirt do |libvirt|
       libvirt.cpus = {{ hostvars['lm']['vagrant_cpu'] }}
@@ -21,7 +25,9 @@ Vagrant.configure(2) do |config|
       libvirt.cpu_mode = 'host-passthrough'
     end
 
+{% if install_underlay == True %}
     nodeconfig.vm.provision "shell", inline: $script
+{% endif %}
 
   end
 end

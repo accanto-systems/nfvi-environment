@@ -10,7 +10,6 @@ docker_compose_version: 1.15.0
 ###############################################
 # kubernetes
 ###############################################
-kubernetes_install: True
 # k8s versions
 kubecni_version: "0.7.5-00"
 kubectl_version: "1.16.1-00"

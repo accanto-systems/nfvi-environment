@@ -1,1 +1,11 @@
 ---
+
+###############################################
+# openstack
+###############################################
+openstack_install_demo: True
+openstack_public_ip: "172.24.4.3"
+openstack_public_cidr: "172.24.4.0/24"
+openstack_start_float: "172.24.4.4"
+openstack_end_float: "172.24.4.250"
+

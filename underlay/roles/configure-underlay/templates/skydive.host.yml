@@ -2,7 +2,7 @@ analyzer:
   listen: 0.0.0.0:8082
   topology:
     fabric:
-{% if openstack_install == True %}
+{% if install_openstack == True %}
 {% for host in groups['ostack_network'] %}
     - TOR[Name=tor] -> TOR_PORT1[Name={{host}}, MTU=1500]
     - TOR_PORT1 -> *[Type=host, Name={{host}}]/bond0
@@ -12,9 +12,9 @@ analyzer:
     - TOR_PORT{{loop.index+1}} -> *[Type=host, Name={{host}}]/bond0
 {% endfor %}
 {% endif %}
-{% if kubernetes_install == True %}
-{% for host in groups['k8s_workers'] %}
-    - TOR[Name=tor] -> TOR_PORT{{loop.index+1+groups['compute']|length}}[Name={{host}}, MTU=1500]
-    - TOR_PORT{{loop.index+1+groups['compute']|length}} -> *[Type=host, Name={{host}}]/bond0
+{% if install_kubeadm == True %}
+{% for host in groups['k8sworkers'] %}
+    - TOR[Name=tor] -> TOR_PORT{{loop.index+1+groups['ostack_compute']|length}}[Name={{host}}, MTU=1500]
+    - TOR_PORT{{loop.index+1+groups['ostack_compute']|length}} -> *[Type=host, Name={{host}}]/bond0
 {% endfor %}
 {% endif %}

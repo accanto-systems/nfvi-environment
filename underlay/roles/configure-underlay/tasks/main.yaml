@@ -3,12 +3,15 @@
 
 - name: run fabric-underlay
   import_tasks: "fabric-underlay.yml"
+  when: install_underlay == true
 
 - name: run onos
   import_tasks: "onos.yml"
+  when: install_underlay == true
 
 - name: run mininet
   import_tasks: "mininet.yml"
+  when: install_underlay == true
 
 - name: run skydive
   import_tasks: "skydive.yml"

@@ -5,11 +5,12 @@
 
 - name: Include k8s playbook
   import_playbook: kubeadm/setup-k8s.yaml
-  when: kubernetes_install == true and hostvars['basehost']['kubernetes_running'] == false
+  when: install_kubeadm == true
 
 - name: Include openstack playbook
   import_playbook: openstack/setup-openstack.yaml
-  when: openstack_install == true and hostvars['basehost']['openstack_running'] == false
+  when: install_openstack == true
 
 - name: Include openshift playbook
   import_playbook: openshift/setup-openshift.yaml
+  when: install_openshift == true

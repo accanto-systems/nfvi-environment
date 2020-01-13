@@ -9,7 +9,7 @@
     src: ../templates/keys/
     dest: /home/vagrant/.ssh/
     mode: 0400
-  when: inventory_hostname in groups.control
+  when: inventory_hostname in groups.ostack_control
 
 - name: make root .ssh directory 
   file:
@@ -21,5 +21,5 @@
     src: ../templates/keys/
     dest: /root/.ssh/
     mode: 0400
-  when: inventory_hostname in groups.control
+  when: inventory_hostname in groups.ostack_control
 

@@ -1,7 +1,7 @@
 clouds:
   openstack:
     auth:
-      auth_url: http://{{ hostvars['controlnode']['ansible_host'] }}/v3
+      auth_url: http://{{ hostvars['oscontrol']['ansible_host'] }}/v3
       username: "admin"
       password: "password"
       project_name: "admin"

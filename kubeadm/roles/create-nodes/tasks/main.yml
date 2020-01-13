@@ -1,6 +1,6 @@
 # create k8s vms
 - name: check if master node is up
-  when: kubernetes_install == true
+  when: install_kubeadm == true
   wait_for:
     port: 22
     host: "{{ hostvars['master1']['ansible_host'] }}"
@@ -12,34 +12,34 @@
  
 - set_fact: 
     kubernetes_running: "{{ True if port_check.failed == False else False }}"
-  when: kubernetes_install == true
+  when: install_kubeadm == true
 
 - debug: 
     var: kubernetes_running
 
 - name: create k8s vagrant dir
-  when: kubernetes_install == true and port_check.failed == true
+  when: install_kubeadm == true and port_check.failed == true
   file:
     path: /opt/k8s
     state: directory
     mode: '0777'
 
 - name: copy k8s vagrant file
-  when: kubernetes_install == true and port_check.failed == true
+  when: install_kubeadm == true and port_check.failed == true
   template: 
     src: k8s.vagrant
     dest: /opt/k8s/Vagrantfile
     mode: 0777
 
 - name: create k8s VMs with vagrant - this may take some time
-  when: kubernetes_install == true and port_check.failed == true
+  when: install_kubeadm == true and port_check.failed == true
   command: vagrant up
   args:
     chdir: /opt/k8s
 
 # test that ssh is running on master node
 - name: Wait for port 22 to become open
-  when: kubernetes_install == true and port_check.failed == true
+  when: install_kubeadm == true and port_check.failed == true
   wait_for:
     port: 22
     host: "{{ hostvars[item]['ansible_host'] }}"

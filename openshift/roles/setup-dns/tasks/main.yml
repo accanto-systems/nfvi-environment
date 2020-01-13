@@ -8,11 +8,12 @@
     src: dnsmasq.conf
     dest: /etc/dnsmasq.conf  
 
-# - name: write etc hosts file
-#   blockinfile:
-#     block: "{{ lookup('template', 'hosts.j2') }}"
-#     dest: /etc/hosts
-#     backup: yes
+- name: write etc hosts file
+  delegate_to: ocphelper.mytest.accanto.com
+  blockinfile:
+    block: "{{ lookup('template', 'hosts.j2') }}"
+    dest: /etc/hosts
+    backup: yes
 
 - name: restart dnsmasq
   service: 

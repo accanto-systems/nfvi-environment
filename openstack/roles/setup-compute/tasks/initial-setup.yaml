@@ -82,7 +82,7 @@
     owner: root
     group: root
     mode: 0644
-  loop: "{{ groups['control'] }}"
+  loop: "{{ groups['ostack_control'] }}"
 
 - name: add network node(s)
   lineinfile:
@@ -91,7 +91,7 @@
     owner: root
     group: root
     mode: 0644
-  loop: "{{ groups['network'] }}"
+  loop: "{{ groups['ostack_network'] }}"
   loop_control:
     index_var: idx
 
@@ -102,6 +102,6 @@
     owner: root
     group: root
     mode: 0644
-  loop: "{{ groups['compute'] }}"
+  loop: "{{ groups['ostack_compute'] }}"
   loop_control:
     index_var: idx

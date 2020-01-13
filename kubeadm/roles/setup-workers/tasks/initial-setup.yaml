@@ -5,7 +5,7 @@
     owner: root
     group: root
     mode: 0644
-  loop: "{{ groups['k8s-masters'] }}"
+  loop: "{{ groups['k8smasters'] }}"
   loop_control:
     index_var: idx
 
@@ -16,7 +16,7 @@
     owner: root
     group: root
     mode: 0644
-  loop: "{{ groups['k8s-workers'] }}"
+  loop: "{{ groups['k8sworkers'] }}"
   loop_control:
     index_var: idx
 
