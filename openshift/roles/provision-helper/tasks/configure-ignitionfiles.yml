@@ -27,6 +27,15 @@
   tags:
     - configure_ignitions_file
 
+- name: generate manifest files
+  shell: /usr/bin/openshift-install create manifests --dir=/opt/ocp4
+
+- name: update master scheduler
+  lineinfile:
+    path: /opt/ocp4/manifests/cluster-scheduler-02-config.yml
+    regexp: '^  mastersSchedulable:'
+    line: '  mastersSchedulable: false'
+
 - name: Execute openshift installer file
   shell: /usr/bin/openshift-install create ignition-configs --dir=/opt/ocp4
   tags: 
