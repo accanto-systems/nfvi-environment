@@ -85,3 +85,9 @@
     name: '*'
     state: latest
   when: port_check.failed == true
+
+- name: add nameserver to resolv.conf
+  lineinfile: 
+    path: /etc/resolv.conf
+    line: nameserver {{ hostvars['basehost'].ansible_host }}
+    insertbefore: BOF

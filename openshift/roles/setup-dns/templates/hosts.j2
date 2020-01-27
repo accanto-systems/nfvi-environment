@@ -1,10 +1,10 @@
+{{ hostvars['ocphelper.mytest.accanto.com'].ansible_host }} api.{{ openshift_domain }}.{{ network_domain }} api-int.{{ openshift_domain }}.{{ network_domain }}
+
 {{ hostvars['ocpbootstrap.mytest.accanto.com'].ansible_host }} ocpbootstrap.{{ openshift_domain }}.{{ network_domain }}
-{{ hostvars['ocphelper.mytest.accanto.com'].ansible_host }} loadbalancer.{{ openshift_domain }}.{{ network_domain }}  api.{{ openshift_domain }}.{{ network_domain }}  api-int.{{ openshift_domain }}.{{ network_domain }}
-
 {% for vm in groups['openshift_masters'] %}
-{{ hostvars[vm].ansible_host }} {{ vm }}  etcd-0.{{ openshift_domain }}.{{ network_domain }}
+{{ hostvars[vm].ansible_host }} {{ vm }}  etcd-{{ loop.index0 }}.{{ openshift_domain }}.{{ network_domain }}
 {% endfor %}
-
 {% for vm in groups['openshift_workers'] %}
 {{ hostvars[vm].ansible_host }} {{ vm }} 
 {% endfor %}
+

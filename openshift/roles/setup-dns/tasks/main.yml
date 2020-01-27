@@ -9,7 +9,6 @@
     dest: /etc/dnsmasq.conf  
 
 - name: write etc hosts file
-  delegate_to: ocphelper.mytest.accanto.com
   blockinfile:
     block: "{{ lookup('template', 'hosts.j2') }}"
     dest: /etc/hosts
