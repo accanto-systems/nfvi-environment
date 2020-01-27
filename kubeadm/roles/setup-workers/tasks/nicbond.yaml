@@ -1,16 +1,16 @@
 - name: enable bonding module
   command: modprobe bonding
-  when: inventory_hostname in groups.workers
+  when: inventory_hostname in groups.k8sworkers
 
 - name: install ifenslave
   apt:
     name: ifenslave
-  when: inventory_hostname in groups.workers
+  when: inventory_hostname in groups.k8sworkers
 
 - name: install bridge utils
   apt:
     name: bridge-utils
-  when: inventory_hostname in groups.workers
+  when: inventory_hostname in groups.k8sworkers
 
 # Bionic configuration
 # --------------------

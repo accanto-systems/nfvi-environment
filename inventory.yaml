@@ -14,11 +14,11 @@ lm ansible_host=192.168.10.5 vagrant_mem=16096 vagrant_cpu=2
 # K8s VMs
 ##############################################################
 [k8smasters]
-k8smaster ansible_host=192.168.10.50 vagrant_mem=4096 vagrant_cpu=2
+k8smaster ansible_host=192.168.10.80 vagrant_mem=8096 vagrant_cpu=4
 
 [k8sworkers]
-k8sworker1 ansible_host=192.168.10.51 vagrant_mem=8192 vagrant_cpu=1
-#k8sworker2 ansible_host=192.168.10.52 vagrant_mem=8192 vagrant_cpu=1
+k8sworker1 ansible_host=192.168.10.81 vagrant_mem=16192 vagrant_cpu=4
+k8sworker2 ansible_host=192.168.10.82 vagrant_mem=16192 vagrant_cpu=4
 
 [k8s:children]
 k8smasters
@@ -28,17 +28,19 @@ k8sworkers
 # Openshift VMs
 ##############################################################
 [openshift_helpers]
-ocphelper.mytest.accanto.com ansible_host=192.168.10.49 vagrant_mem=2048 vagrant_cpu=1
+ocphelper.mytest.accanto.com ansible_host=192.168.10.49 vagrant_mem=4096 vagrant_cpu=2
 
 [openshift_bootstraps]
-ocpbootstrap.mytest.accanto.com ansible_host=192.168.10.50 vagrant_mem=4096 vagrant_cpu=1 mac_address="52:54:00:7d:2d:10"
+ocpbootstrap.mytest.accanto.com ansible_host=192.168.10.50 vagrant_mem=16096 vagrant_cpu=8 mac_address="52:54:00:7d:2d:10"
 
 [openshift_masters]
-ocpmaster1.mytest.accanto.com ansible_host=192.168.10.51 vagrant_mem=8096 vagrant_cpu=2 mac_address="52:54:00:7d:2d:11"
+ocpmaster1.mytest.accanto.com ansible_host=192.168.10.51 vagrant_mem=16096 vagrant_cpu=8 mac_address="52:54:00:7d:2d:11"
+ocpmaster2.mytest.accanto.com ansible_host=192.168.10.52 vagrant_mem=16096 vagrant_cpu=8 mac_address="52:54:00:7d:2d:12"
+ocpmaster3.mytest.accanto.com ansible_host=192.168.10.53 vagrant_mem=16096 vagrant_cpu=8 mac_address="52:54:00:7d:2d:13"
 
 [openshift_workers]
-ocpworker1.mytest.accanto.com ansible_host=192.168.10.52 vagrant_mem=4096 vagrant_cpu=1 mac_address="52:54:00:7d:2d:12"
-#ocpworker2.mytest.accanto.com ansible_host=192.168.10.53 vagrant_mem=4096 vagrant_cpu=1 mac_address="52:54:00:7d:2d:13"
+ocpworker1.mytest.accanto.com ansible_host=192.168.10.54 vagrant_mem=16096 vagrant_cpu=4 mac_address="52:54:00:7d:2d:14"
+ocpworker2.mytest.accanto.com ansible_host=192.168.10.55 vagrant_mem=16096 vagrant_cpu=4 mac_address="52:54:00:7d:2d:15"
 
 [openshift:children]
 underlay
@@ -51,14 +53,15 @@ openshift_workers
 # Openstack VMs
 ##############################################################
 [ostack_control]
-oscontrol ansible_host=192.168.10.10 vagrant_mem=8096 vagrant_cpu=2
+oscontrol ansible_host=192.168.10.10 vagrant_mem=8096 vagrant_cpu=4
 
 [ostack_network]
 osnetwork ansible_host=192.168.10.11 vagrant_mem=2048 vagrant_cpu=1
 
 [ostack_compute]
-oscompute1 ansible_host=192.168.10.12 vagrant_mem=8192 vagrant_cpu=1
-#oscompute2 ansible_host=192.168.10.13 vagrant_mem=8192 vagrant_cpu=1
+oscompute1 ansible_host=192.168.10.12 vagrant_mem=8192 vagrant_cpu=4
+oscompute2 ansible_host=192.168.10.13 vagrant_mem=8192 vagrant_cpu=4
+oscompute3 ansible_host=192.168.10.14 vagrant_mem=8192 vagrant_cpu=4
 
 [openstack:children]
 ostack_control

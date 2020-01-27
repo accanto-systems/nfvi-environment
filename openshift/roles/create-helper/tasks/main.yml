@@ -10,30 +10,36 @@
   with_items: "{{ groups['openshift_helpers'] }}"
  
 - set_fact: 
-    helper_running: "{{ True if port_check.failed == False else False }}"
+    helper_running: "{{ True if (port_check.results[0].failed == false) else False }}"
+
+- debug:
+    var: port_check
+
+- debug:
+    var: helper_running
 
 - name: create helper vagrant dir
-  when: port_check.failed == true
+  when: helper_running == false
   file:
     path: /opt/ocphelper
     state: directory
     mode: '0777'
 
 - name: copy helper vagrant file
-  when: port_check.failed == true
+  when: helper_running == false
   template: 
     src: helper.vagrant
     dest: /opt/ocphelper/Vagrantfile
     mode: 0777
 
 - name: create helper VM with vagrant - this may take some time
-  when: port_check.failed == true
+  when: helper_running == false
   command: vagrant up
   args:
     chdir: /opt/ocphelper
 
 - name: Wait for port 22
-  when: port_check.failed == true
+  when: helper_running == false
   wait_for:
     port: 22
     host: "{{ hostvars[item]['ansible_host'] }}"
@@ -47,47 +53,48 @@
     username: "{{ subscription_user }}"
     password: "{{ subscription_password }}"
     auto_attach: true
-  when: port_check.failed == true
+  when: helper_running == false
 
 - name: Disable all RHSM repositories
   delegate_to: ocphelper.mytest.accanto.com
   rhsm_repository:
     name: '*'
     state: disabled
-  when: port_check.failed == true
+  when: helper_running == false
 
 - name: Enable rhel 7 server repository
   delegate_to: ocphelper.mytest.accanto.com
   rhsm_repository:
     name: rhel-7-server-rpms
-  when: port_check.failed == true
+  when: helper_running == false
 
 - name: Enable rhel 7 common
   delegate_to: ocphelper.mytest.accanto.com
   rhsm_repository:
     name: rhel-7-server-rh-common-rpms   
-  when: port_check.failed == true
+  when: helper_running == false
 
 - name: Enable extras
   delegate_to: ocphelper.mytest.accanto.com
   rhsm_repository:
     name: rhel-7-server-extras-rpms
-  when: port_check.failed == true
+  when: helper_running == false
 
 - name: install utility packages
   yum:
     name: yum-utils
     state: present
-  when: port_check.failed == true
+  when: helper_running == false
 
 - name: upgrade all packages
   yum:
     name: '*'
     state: latest
-  when: port_check.failed == true
+  when: helper_running == false
 
 - name: add nameserver to resolv.conf
   lineinfile: 
     path: /etc/resolv.conf
     line: nameserver {{ hostvars['basehost'].ansible_host }}
     insertbefore: BOF
+  when: helper_running == false

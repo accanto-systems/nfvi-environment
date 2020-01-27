@@ -14,7 +14,7 @@ skydive_url: https://github.com/skydive-project/skydive/releases/download/v0.23.
 ###############################################
 # Onos
 ###############################################
-onos_url: http://repo1.maven.org/maven2/org/onosproject/onos-releases/2.1.0
+onos_url: https://repo1.maven.org/maven2/org/onosproject/onos-releases/2.1.0
 onos_filename: onos-2.1.0.tar.gz
 
 ###############################################

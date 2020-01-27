@@ -3,15 +3,18 @@
   when: install_kubeadm == true
   wait_for:
     port: 22
-    host: "{{ hostvars['master1']['ansible_host'] }}"
+    host: "{{ hostvars['k8smaster']['ansible_host'] }}"
     delay: 5
     timeout: 10
     msg: "Timeout waiting for 22 to respond"
   register: port_check
   ignore_errors: yes
- 
+
+- debug: 
+    var: port_check 
+
 - set_fact: 
-    kubernetes_running: "{{ True if port_check.failed == False else False }}"
+    kubernetes_running: "{{ true if (port_check.failed is defined and port_check.failed == false) or (port_check.results[0] is defined and port_check.results[0].failed == false) else false }}"
   when: install_kubeadm == true
 
 - debug: 

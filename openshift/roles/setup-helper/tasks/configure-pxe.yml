@@ -9,12 +9,18 @@
     - "{{ pxe_image_directory }}"
     - "{{ pxe_boot_directory }}"
 
+- name: check if rhcos exists already 
+  stat:
+    path: "{{ pxe_image_directory }}/rhcos-4.2.0-x86_64-installer-initramfs.img"
+  register: rhcos_result
+
 - name: Downloading RHCOS 4.2.0 initram
   get_url:
     url: "{{ rhcos_initramfs_url }}"
     dest: "{{ pxe_image_directory }}"
     timeout: 300
     validate_certs: false
+  when: rhcos_result.stat.exists == False 
   tags:
       - configure_pxe_server
       - download_rhcos_initram
@@ -25,17 +31,20 @@
     dest: "{{ pxe_image_directory }}"
     validate_certs: false
     timeout: 300
+  when: rhcos_result.stat.exists == False 
   tags:
       - configure_pxe_server
       - download_rhcos_kernel
 
 - name: Copy file for PXE boot
   shell: cp -rvf /usr/share/syslinux/* /var/lib/tftpboot
+  when: rhcos_result.stat.exists == False 
   tags:
       - configure_pxe_server
 
 - name: Restore SELinux fcontext
   shell: restorecon -RFv "{{ item }}"
+  when: rhcos_result.stat.exists == False 
   tags:
       - configure_pxe_server
   with_items:

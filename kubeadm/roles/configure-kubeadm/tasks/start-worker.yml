@@ -1,5 +1,5 @@
 - name: Get join command from Kubeadm Master
-  delegate_to: "master1"
+  delegate_to: "k8smaster"
   command: kubeadm token create --print-join-command
   changed_when: false
   register: join_command_register

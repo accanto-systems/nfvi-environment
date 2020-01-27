@@ -9,13 +9,18 @@
     - "{{ images_directory }}"
     - "{{ ignitions_directory }}"
 
+- name: check if rhcos exists already 
+  stat:
+    path: "{{ images_directory }}/rhcos-4.2.0-x86_64-metal-bios.raw.gz"
+  register: rhcos_result
+
 - name: Downloading RHCOS 4.2.0 OS BIOS image
   get_url:
     url: "{{ rhcos_biosimg_url }}"
     dest: "{{ images_directory }}"
     timeout: 300
     validate_certs: false
-  when: biossetup
+  when: biossetup and rhcos_result.stat.exists == False 
   tags:
       - configure_http_server
       - download_rhcos_image
@@ -26,7 +31,7 @@
     dest: "{{ images_directory }}"
     timeout: 300
     validate_certs: false
-  when: uefisetup
+  when: uefisetup and rhcos_result.stat.exists == False 
   tags:
       - configure_http_server
       - download_rhcos_image

@@ -2,7 +2,7 @@ Vagrant.configure(2) do |config|
 
 {% for host in groups['k8smasters'] %}
   config.vm.define "{{ hostvars[host].inventory_hostname }}" do |nodeconfig|
-    nodeconfig.vm.hostname = 'master1'
+    nodeconfig.vm.hostname = 'k8smaster'
     nodeconfig.vm.box = 'accanto/xenial'
     nodeconfig.vm.box_version = "1.0"
     nodeconfig.vm.synced_folder ".", "/vagrant", disabled: true

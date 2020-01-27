@@ -24,7 +24,7 @@ EXCLUDE_SERVERS=
 CONFIG_DEBUG_MODE=n
 
 CONFIG_CONTROLLER_HOST={{ hostvars['oscontrol']['ansible_host'] }}
-CONFIG_ostack_compute_HOSTS={% for arg in groups['ostack_compute'] %}{{ hostvars[arg]['ansible_host'] }}{% if not loop.last %},{% endif %} {% endfor %} 
+CONFIG_COMPUTE_HOSTS={% for arg in groups['ostack_compute'] %}{{ hostvars[arg]['ansible_host'] }}{% if not loop.last %},{% endif %} {% endfor %} 
 CONFIG_NETWORK_HOSTS={{ hostvars['osnetwork']['ansible_host'] }}
 CONFIG_STORAGE_HOST={{ hostvars['oscontrol']['ansible_host'] }}
 CONFIG_SAHARA_HOST={{ hostvars['oscontrol']['ansible_host'] }}
