@@ -8,12 +8,15 @@ SCRIPT
 
 Vagrant.configure(2) do |config|
 
-  config.vm.define 'lm' do |nodeconfig|
-    nodeconfig.vm.hostname = 'lm'
+  config.vm.define 'aio' do |nodeconfig|
+    nodeconfig.vm.hostname = 'aio'
     nodeconfig.vm.box = 'accanto/xenial'
     nodeconfig.vm.box_version = "1.0"
     nodeconfig.vm.synced_folder ".", "/vagrant", disabled: true
-    nodeconfig.vm.network :private_network, :ip => "{{ hostvars['lm']['ansible_host'] }}"
+    nodeconfig.vm.network :private_network, :ip => "{{ hostvars['lm']['ansible_host'] }}",
+            libvirt__network_name: "helper_managed",
+            libvirt__dhcp_enabled: false,
+            libvirt__host_ip: '192.168.10.1'
 {% if install_underlay == True %}
     nodeconfig.vm.network 'public_network', dev: 's1', type: 'bridge', mode: 'bridge', :ovs => true, ip: '10.0.30.5'
 {% endif %}

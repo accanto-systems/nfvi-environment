@@ -36,18 +36,28 @@ def startLab():
 
   s6 = net.addSwitch('s6')
   switches['s6']=s6
+
+  s7 = net.addSwitch('s7')
+  switches['s5']=s5
+
+  s8 = net.addSwitch('s8')
+  switches['s6']=s6
   
-  net.addLink( s5, s1 )
-  net.addLink( s5, s2 )
-  net.addLink( s5, s3 )
-  net.addLink( s5, s4 )
+  net.addLink( s7, s1 )
+  net.addLink( s7, s2 )
+  net.addLink( s7, s3 )
+  net.addLink( s7, s4 )
+  net.addLink( s7, s5 )
+  net.addLink( s7, s6 )
 
-  net.addLink( s6, s1 )
-  net.addLink( s6, s2 )
-  net.addLink( s6, s3 )
-  net.addLink( s6, s4 )
+  net.addLink( s8, s1 )
+  net.addLink( s8, s2 )
+  net.addLink( s8, s3 )
+  net.addLink( s8, s4 )
+  net.addLink( s8, s5 )
+  net.addLink( s8, s6 )
 
-  net.addLink( s5, s6 )
+  net.addLink( s7, s8 )
 
   net.start()
 

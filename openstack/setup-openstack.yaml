@@ -13,6 +13,7 @@
   tasks:
     - import_role:
         name: setup-compute
+      when: hostvars['basehost']['kubernetes_running'] == false
 
 - hosts: ostack_control
   gather_facts: yes
@@ -20,3 +21,4 @@
   tasks:
     - import_role:
         name: run-packstack
+      when: hostvars['basehost']['kubernetes_running'] == false

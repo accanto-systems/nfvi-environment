@@ -3,6 +3,10 @@
 - name: Include underlay playbook
   import_playbook: underlay/setup-underlay.yaml
 
+- name: Include AIO playbook
+  import_playbook: stratoss/setup-stratoss.yaml
+  when: install_aio == true
+
 - name: Include k8s playbook
   import_playbook: kubeadm/setup-k8s.yaml
   when: install_kubeadm == true

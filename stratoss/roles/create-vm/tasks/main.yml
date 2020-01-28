@@ -1,5 +1,5 @@
 - name: check if AIO node is up
-  when: AIO_VM == true
+  when: install_aio == true
   wait_for:
     port: 22
     host: "{{ hostvars['lm']['ansible_host'] }}"
@@ -10,28 +10,28 @@
   ignore_errors: yes
 
 - name: create lm vagrant dir
-  when: AIO_VM == true and port_check.failed == true
+  when: install_aio == true and port_check.failed == true
   file:
     path: /opt/lm
     state: directory
     mode: '0777'
 
 - name: copy lm vagrant file
-  when: AIO_VM == true and port_check.failed == true
+  when: install_aio == true and port_check.failed == true
   template: 
     src: lm.vagrant
     dest: /opt/lm/Vagrantfile
     mode: 0777
 
 - name: create lm VM with vagrant - this may take some time
-  when: AIO_VM == true and port_check.failed == true
+  when: install_aio == true and port_check.failed == true
   command: vagrant up
   args:
     chdir: /opt/lm
 
 # test that ssh is running on lm node
 - name: Wait for port 22 to become open
-  when: AIO_VM == true and port_check.failed == true
+  when: install_aio == true and port_check.failed == true
   wait_for:
     port: 22
     host: "{{ hostvars['lm']['ansible_host'] }}"

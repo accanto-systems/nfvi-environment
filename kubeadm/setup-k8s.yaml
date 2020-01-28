@@ -13,7 +13,10 @@
   tasks:
     - import_role:
         name: setup-workers
+      when: hostvars['basehost']['kubernetes_running'] == false
     - import_role:
         name: setup-docker
+      when: hostvars['basehost']['kubernetes_running'] == false
     - import_role:
         name: configure-kubeadm
+      when: hostvars['basehost']['kubernetes_running'] == false

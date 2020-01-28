@@ -1,0 +1,3 @@
+kubernetes_running: false
+ocp_running: false
+openstack_running: false
