@@ -2,7 +2,7 @@
 $script = <<-SCRIPT
 ifconfig eth2 0
 ip link add link eth2 name eth2.5 type vlan id 5
-ifconfig eth2.5 10.0.30.5
+ifconfig eth2.5 10.0.30.5/24
 SCRIPT
 {% endif %}
 
