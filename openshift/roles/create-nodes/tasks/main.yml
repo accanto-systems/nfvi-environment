@@ -12,25 +12,50 @@
 - set_fact: 
     ocp_running: "{{ True if port_check.failed == False else False }}"
 
-- name: create ocp vagrant dir
+- name: create ocp masters vagrant dir
   when: ocp_running == false
   file:
-    path: /opt/ocpnodes
+    path: /opt/ocpmasters
     state: directory
     mode: '0777'
 
-- name: copy ocp nodes vagrant file
+- name: copy ocp master nodes vagrant file
   when: ocp_running == false
   template: 
-    src: ocp.vagrant
-    dest: /opt/ocpnodes/Vagrantfile
+    src: ocp-masters.vagrant
+    dest: /opt/ocpmasters/Vagrantfile
     mode: 0777
 
-- name: create openshift node VMs with vagrant - this may take some time
+- name: create ocp workers vagrant dir
+  when: ocp_running == false
+  file:
+    path: /opt/ocpworkers
+    state: directory
+    mode: '0777'
+
+- name: copy ocp worker nodes vagrant file
+  when: ocp_running == false
+  template: 
+    src: ocp-workers.vagrant
+    dest: /opt/ocpworkers/Vagrantfile
+    mode: 0777
+
+- name: create openshift master node VMs with vagrant - this may take some time
   when: ocp_running == false
   command: vagrant up
   args:
-    chdir: /opt/ocpnodes
+    chdir: /opt/ocpmasters
+
+# - name: create openshift worker node VMs with vagrant - this may take some time
+#   when: ocp_running == false
+#   command: vagrant up
+#   args:
+#     chdir: /opt/ocpworkers
+
+- name: Wait for openshift bootstrap to complete
+  delegate_to: ocphelper.mytest.accanto.com
+  when: ocp_running == false
+  shell: /usr/bin/openshift-install --dir=/opt/ocp4 wait-for bootstrap-complete
 
 - name: Wait for openshift bootstrap to complete
   delegate_to: ocphelper.mytest.accanto.com
@@ -41,7 +66,7 @@
   when: ocp_running == false
   command: vagrant destroy ocpbootstrap.mytest.accanto.com -f
   args:
-    chdir: /opt/ocpnodes
+    chdir: /opt/ocpmasters
 
 - name: Remove bootstrap from load balancer
   when: ocp_running == false

@@ -36,6 +36,9 @@
     regexp: '^  mastersSchedulable:'
     line: '  mastersSchedulable: false'
 
+# - name: remove clustername from ingress manifest
+#   command: "sed -i 's/{{ openshift_domain }}.//' /opt/ocp4/manifests/cluster-ingress-02-config.yml"
+
 - name: Execute openshift installer file
   shell: /usr/bin/openshift-install create ignition-configs --dir=/opt/ocp4
   tags: 

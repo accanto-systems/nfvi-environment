@@ -1,0 +1,29 @@
+Vagrant.configure(2) do |config|
+
+{% for host in groups['openshift_workers'] %}
+  config.vm.define "{{ hostvars[host].inventory_hostname }}" do |nodeconfig|
+
+    nodeconfig.vm.network :private_network, :ip => "{{ hostvars[host]['ansible_host'] }}",
+            libvirt__network_name: "helper_managed",
+            libvirt__dhcp_enabled: false,
+            libvirt__host_ip: '192.168.10.1',
+            mac: "{{ hostvars[host]['mac_address'] }}",
+            model_type: "virtio"
+{% if install_underlay == True %}
+    nodeconfig.vm.network :public_network, :dev => "s5", :mode => "bridge", :type => "bridge", :ovs => true, auto_config: false
+    nodeconfig.vm.network :public_network, :dev => "s6", :mode => "bridge", :type => "bridge", :ovs => true, auto_config: false
+{% endif %}
+
+    nodeconfig.vm.provider :libvirt do |libvirt|
+      libvirt.mgmt_attach = false
+      libvirt.cpus = {{ hostvars[host]['vagrant_cpu'] }}
+      libvirt.memory = {{ hostvars[host]['vagrant_mem'] }}
+      libvirt.storage :file, :size => '100G', :type => 'qcow2'
+      boot_network = {'network' => 'helper_managed'}
+      libvirt.boot 'hd'
+      libvirt.boot 'network'
+    end
+
+  end
+{% endfor %}
+end

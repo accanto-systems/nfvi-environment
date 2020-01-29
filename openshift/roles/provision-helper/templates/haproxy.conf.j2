@@ -111,6 +111,9 @@ defaults
 {% for vm in groups['openshift_workers'] %}
    server {{ vm }} {{ hostvars[vm].ansible_host }}:80 check
 {% endfor %}
+{% for vm in groups['openshift_masters'] %}
+   server {{ vm }} {{ hostvars[vm].ansible_host }}:80 check
+{% endfor %}
 
 # ---------------------------------------------------------------------
 # round robin balancing for OCP Ingress Secure Port
@@ -123,6 +126,9 @@ defaults
    balance roundrobin
    mode tcp
 {% for vm in groups['openshift_workers'] %}
+   server {{ vm }} {{ hostvars[vm].ansible_host }}:443 check
+{% endfor %}
+{% for vm in groups['openshift_masters'] %}
    server {{ vm }} {{ hostvars[vm].ansible_host }}:443 check
 {% endfor %}
 
