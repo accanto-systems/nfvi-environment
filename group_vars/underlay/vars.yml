@@ -21,11 +21,9 @@ onos_filename: onos-2.1.0.tar.gz
 # OpenVPN
 ###############################################
 openvpn_port: 1194
-# change this to the public IP address or domain name of the bare metal Ubuntu server
-openvpn_public_ip: 10.0.0.1
 
 ###############################################
 # Vagrant
 ###############################################
-vagrant_url: https://releases.hashicorp.com/vagrant/2.2.6/
-vagrant_deb_file: vagrant_2.2.6_x86_64.deb
+vagrant_url: https://releases.hashicorp.com/vagrant/2.2.7/
+vagrant_deb_file: vagrant_2.2.7_x86_64.deb

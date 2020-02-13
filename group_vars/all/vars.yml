@@ -21,3 +21,4 @@ subscription_password: password
 openstack_offical_redhat: False
 openstack_pool_id: pool_id
 openstack_public_ip: "172.24.4.3"
+openstack_public_cidr: "172.24.4.0/24"
