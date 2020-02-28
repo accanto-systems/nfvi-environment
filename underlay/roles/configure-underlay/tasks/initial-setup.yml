@@ -44,14 +44,14 @@
   register: xstart_file
 
 - name: create .vnc directory
-  when: xstart_file.stat.exists
+  when: xstart_file.stat.exists == False 
   file:
     path: "{{ '~' + ansible_user | expanduser }}/.vnc"
     state: directory
     mode: '0777'
 
 - name: update xstart file
-  when: xstart_file.stat.exists
+  when: xstart_file.stat.exists == False 
   template:
     src: xstartup
     force: true
