@@ -29,7 +29,6 @@
 
 - name: remove test controller
   command: "apt-get -y --purge remove openvswitch-testcontroller"
-  warn: false
 
 - name: check if mininet is running
   delegate_to: basehost

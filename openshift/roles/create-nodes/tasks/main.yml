@@ -33,29 +33,24 @@
     state: directory
     mode: '0777'
 
-- name: copy ocp worker nodes vagrant file
-  when: ocp_running == false
-  template: 
-    src: ocp-workers.vagrant
-    dest: /opt/ocpworkers/Vagrantfile
-    mode: 0777
-
 - name: create openshift master node VMs with vagrant - this may take some time
   when: ocp_running == false
   command: vagrant up
   args:
     chdir: /opt/ocpmasters
 
-# - name: create openshift worker node VMs with vagrant - this may take some time
-#   when: ocp_running == false
-#   command: vagrant up
-#   args:
-#     chdir: /opt/ocpworkers
+- name: copy ocp worker nodes vagrant file
+  when: ocp_running == false and groups['openshift_workers'] | length > 0 
+  template: 
+    src: ocp-workers.vagrant
+    dest: /opt/ocpworkers/Vagrantfile
+    mode: 0777
 
-- name: Wait for openshift bootstrap to complete
-  delegate_to: ocphelper.mytest.accanto.com
-  when: ocp_running == false
-  shell: /usr/bin/openshift-install --dir=/opt/ocp4 wait-for bootstrap-complete
+- name: create openshift worker node VMs with vagrant - this may take some time
+  when: ocp_running == false and groups['openshift_workers'] | length > 0 
+  command: vagrant up
+  args:
+    chdir: /opt/ocpworkers
 
 - name: Wait for openshift bootstrap to complete
   delegate_to: ocphelper.mytest.accanto.com

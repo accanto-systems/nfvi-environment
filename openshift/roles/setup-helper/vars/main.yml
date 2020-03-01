@@ -40,15 +40,15 @@ allowed_http_port_t:
     - 5003
     - 5004
 
-rhcos_biosimg_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.2/latest/rhcos-4.2.0-x86_64-metal-bios.raw.gz
-rhcos_uefiimg_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.2/latest/rhcos-4.2.0-x86_64-metal-uefi.raw.gz
+rhcos_biosimg_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.2/latest/rhcos-4.2.18-x86_64-metal-bios.raw.gz
+rhcos_uefiimg_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.2/latest/rhcos-4.2.18-x86_64-metal-uefi.raw.gz
 images_directory: /var/www/html/
 ignitions_directory: /var/www/html/
 
 pxe_image_directory: /var/lib/tftpboot/
 pxe_boot_directory: /var/lib/tftpboot/pxelinux.cfg
-rhcos_kernel_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.2/latest/rhcos-4.2.0-x86_64-installer-kernel
-rhcos_initramfs_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.2/latest/rhcos-4.2.0-x86_64-installer-initramfs.img
+rhcos_kernel_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.2/latest/rhcos-4.2.18-x86_64-installer-kernel
+rhcos_initramfs_url: https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.2/latest/rhcos-4.2.18-x86_64-installer-initramfs.img
 
 oc_install_url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ openshift_version }}/openshift-install-linux-{{ openshift_version }}.tar.gz
 oc_client_url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ openshift_version }}/openshift-client-linux-{{ openshift_version }}.tar.gz

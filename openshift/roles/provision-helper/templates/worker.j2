@@ -3,6 +3,6 @@ prompt 0
 timeout 50
 menu title **** OpenShift 4 Worker PXE Boot Menu ****
  
-label Install CoreOS 4.2.0 Worker Node
- kernel rhcos-4.2.0-x86_64-installer-kernel
- append ip=dhcp rd.neednet=1 coreos.inst.install_dev=vda console=tty0 console=ttyS0 coreos.inst=yes coreos.inst.image_url=http://{{ ansible_host }}:8080/rhcos-4.2.0-x86_64-metal-bios.raw.gz coreos.inst.ignition_url=http://{{ ansible_host }}:8080/worker.ign initrd=rhcos-4.2.0-x86_64-installer-initramfs.img
+label Install CoreOS 4.2.18 Worker Node
+ kernel rhcos-4.2.18-x86_64-installer-kernel
+ append ip=dhcp rd.neednet=1 coreos.inst.install_dev=vda console=tty0 console=ttyS0 coreos.inst=yes coreos.inst.image_url=http://{{ ansible_host }}:8080/rhcos-4.2.18-x86_64-metal-bios.raw.gz coreos.inst.ignition_url=http://{{ ansible_host }}:8080/worker.ign initrd=rhcos-4.2.18-x86_64-installer-initramfs.img

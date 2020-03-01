@@ -11,10 +11,10 @@
 
 - name: check if rhcos exists already 
   stat:
-    path: "{{ pxe_image_directory }}/rhcos-4.2.0-x86_64-installer-initramfs.img"
+    path: "{{ pxe_image_directory }}/rhcos-4.2.18-x86_64-installer-initramfs.img"
   register: rhcos_result
 
-- name: Downloading RHCOS 4.2.0 initram
+- name: Downloading RHCOS 4.2.18 initram
   get_url:
     url: "{{ rhcos_initramfs_url }}"
     dest: "{{ pxe_image_directory }}"
@@ -25,7 +25,7 @@
       - configure_pxe_server
       - download_rhcos_initram
 
-- name: Downloading RHCOS 4.2.0 kernel
+- name: Downloading RHCOS 4.2.18 kernel
   get_url:
     url: "{{ rhcos_kernel_url }}"
     dest: "{{ pxe_image_directory }}"

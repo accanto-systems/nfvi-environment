@@ -11,10 +11,10 @@
 
 - name: check if rhcos exists already 
   stat:
-    path: "{{ images_directory }}/rhcos-4.2.0-x86_64-metal-bios.raw.gz"
+    path: "{{ images_directory }}/rhcos-4.2.18-x86_64-metal-bios.raw.gz"
   register: rhcos_result
 
-- name: Downloading RHCOS 4.2.0 OS BIOS image
+- name: Downloading RHCOS 4.2.18 OS BIOS image
   get_url:
     url: "{{ rhcos_biosimg_url }}"
     dest: "{{ images_directory }}"
@@ -25,7 +25,7 @@
       - configure_http_server
       - download_rhcos_image
 
-- name: Downloading RHCOS 4.2.0 OS UEFI image
+- name: Downloading RHCOS 4.2.18 OS UEFI image
   get_url:
     url: "{{ rhcos_biosimg_url }}"
     dest: "{{ images_directory }}"

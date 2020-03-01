@@ -15,12 +15,19 @@
   gather_facts: no
   become: yes
   tasks:
-    - name: destroy openshift nodes
+    - name: destroy openshift master nodes
       when: install_openshift == true
       command: vagrant destroy -f
       ignore_errors: yes
       args:
-        chdir: /opt/ocpnodes
+        chdir: /opt/ocpmasters
+
+    - name: destroy openshift worker nodes
+      when: install_openshift == true
+      command: vagrant destroy -f
+      ignore_errors: yes
+      args:
+        chdir: /opt/ocpworkers
 
     - name: destroy openshift helper
       when: install_openshift == true
