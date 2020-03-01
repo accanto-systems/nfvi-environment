@@ -3,7 +3,7 @@
 - import_tasks: ./setup-node-keys.yaml
 
 - import_tasks: ./nicbond.yaml
-  when: inventory_hostname in groups.ostack_compute or inventory_hostname in groups.ostack_network
+  when: (inventory_hostname in groups.ostack_compute or inventory_hostname in groups.ostack_network) and install_underlay == True
 
 - import_tasks: ./skydive.yaml
   when: (inventory_hostname in groups.ostack_compute or inventory_hostname in groups.ostack_network) and install_skydive == true

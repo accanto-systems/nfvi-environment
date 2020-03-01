@@ -27,7 +27,7 @@ A number of internal linux and openvswith networks will be created that are atta
 
 * LM - https://192.168.10.5:8082
 * CICD Hub - http://192.168.10.5:8084-7
-* Openstack Dashboard - http://192.168.10.10  (admin/password)
+* Openstack Dashboard - http://192.168.10.10 (admin/password)
 * K8s dashboard - http://192.168.10.50:31443 
-* Onos - http://127.0.0.1:8181/onos/ui  (onos/rocks)
-* Skydive - http://127.0.0.1:8082
+* Onos - locally @ http://127.0.0.1:8181/onos/ui vpn @ http://10.8.0.1:8181/onos/ui (onos/rocks)
+* Skydive - locally @ http://127.0.0.1:8082 vpn @ http://10.8.0.1:8082

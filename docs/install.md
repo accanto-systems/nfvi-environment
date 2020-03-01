@@ -6,37 +6,104 @@
 * Ubuntu Bionic Operating system
 * KVM passthrough enabled on server
 
-### Add worker/compute nodes
+## Configure your environment 
 
-In the **inventory.yaml** file you can add more worker and compute nodes and to kubernetes and openstack deployments by adding hosts to the workers group for kubernetes and to the compute group for openstack.  
+Toggle the NFVI services you want the playbook to install by setting the appropriate variables in the **group_vars/all/vars.yml** file to **True/False**.
 
-Openstack compute nodes can be added as below:
+| Service                   | flag to set                 | 
+|---------------------------|-----------------------------|
+| Openstack instance        | **install_openstack**       |
+| Kubeadm instance          | **install_kubeadm**         |
+| Openshift instance        | **install_openshift**       |
+| SDN controlled network fabric | **install_underlay**    |
+| Openvpn server            | **install_openvpn**         |
+| Skydive network discovery | **install_skydive**         |
+| Virtual Machine to run an ALM AIO | **install_aio**     |
+
+Each of the NFVI services can be further configured within the appropriate group variables directory under **group_vars**.
+
+## Setup your inventory
+
+For each of the NFVI services you can add/remove nodes by adding hosts to the appropriate section in the **inventory.yaml** file. 
+
+#### Openstack
+
+To add/remove nodes from an Openstack deployment you can add host entries to/from the openstack section of the inventory file as below. 
 
 ```
-[workers]
+[ostack_control]
+oscontrol ansible_host=192.168.10.10 vagrant_mem=8096 vagrant_cpu=2
+
+[ostack_network]
+osnetwork ansible_host=192.168.10.11 vagrant_mem=2048 vagrant_cpu=1
+
+[ostack_compute]
+oscompute1 ansible_host=192.168.10.12 vagrant_mem=8192 vagrant_cpu=1
+oscompute2 ansible_host=192.168.10.13 vagrant_mem=8192 vagrant_cpu=1
+```
+
+Each host entry must provide an ip address in the 192.168.10.0 CIDR, along with memory and cpu requirements. These host variables will be used to generate a vagrant template for each. 
+
+For example, to add an additional compute node simply add another host entry in the **ostack_compute** group as follows:
+
+```
+oscompute3 ansible_host=192.168.10.14 vagrant_mem=8192 vagrant_cpu=1
+```
+
+If you want to install a Redhat Openstack instance rather than a vanilla opensource one, you need to configure the following variables in the **group_vars/all/vars.yml** file with your redhat subscription credentials:
+
+```
+subscription_user: user
+subscription_password: password
+# if set to true this will install official redhat openstack, Redhat subscription properties must be provided
+# if set to false the unsupported centos openstack distribution will be installed
+openstack_offical_redhat: True
+openstack_pool_id: pool_id
+```
+
+You can change the Public CIDR of the external Openstack network and floating IP address ranges by configuring the following variables:
+
+```
+openstack_public_ip: "172.24.4.3"
+openstack_public_cidr: "172.24.4.0/24"
+openstack_start_float: "172.24.4.4"
+openstack_end_float: "172.24.4.250"
+```
+
+#### Openshift
+
+TBC
+
+#### Kubeadm
+
+To add/remove nodes from the Openstack deployment you can add host entries to/from the openstack section of the inventory file as below. 
+
+```
+[k8sworkers]
 worker1 ansible_host=192.168.10.51 vagrant_mem=8192 vagrant_cpu=1
 worker2 ansible_host=192.168.10.52 vagrant_mem=8192 vagrant_cpu=1
 ```
 
-Kubernetes worker nodes can be added as below:
-
-```
-[compute]
-computenode1 ansible_host=192.168.10.12 vagrant_mem=8192 vagrant_cpu=1
-computenode2 ansible_host=192.168.10.13 vagrant_mem=8192 vagrant_cpu=1
-```
-
 You must provide ip address, and memory and cpu requirements for each host.
 
-### Configure your environment 
+## Creating the NFVI environment
 
-Update the **variables.yaml** file with your required environment configuration and run the following command to create the NFVI sandbox. 
+Set the base host credentials in the **inventory.yml** file by updating the **basehost** host entry with your server login credentials, e.g.
 
+```
+[underlay]
+basehost ansible_host=192.168.1.168 ansible_connection="ssh" ansible_user="ubuntu" ansible_ssh_pass="ubuntu" ansible_become_pass="ubuntu" ansible_ssh_common_args='-o StrictHostKeyChecking=no' #ansible_ssh_private_key_file="~/demo.pem"
+```
+
+The ansible_host value must be an external ip address of the host machine, not an internal address e.g. 127.0.0.1. This address is used to relate skydive analyzers with agents running inside virtual machines. 
+
+To run the NFVI playbook, run the following command:
+ 
 ```
 ansible-playbook -i inventory.yaml setup-nfvi.yaml
 ```
 
-### Clean your environment
+## Clean your environment
 
 You can remove an NFVI environment by running the following ansible playbook. 
 
@@ -46,9 +113,26 @@ ansible-playbook -i inventory.yaml clean-nfvi.yaml
 
 ## Accessing the environment
 
+
+### Openvpn
+
+If openvpn is enabled an openvpn server is started running on the port specified in the **group_vars/all/vars.yml** file as follows
+
+```
+openvpn_port: 1194
+```
+
+Ensure this port is opened on your base host server
+
+An openvpn client is generated by the playbook and the file **client.ovpn** placed in the home directory of the ansible user. This file will use the ip address of the base host as the server to connect to. If you want to change this address, you can do so in the following variable. 
+
+```
+openvpn_public_ip: 
+```
+
 ### VNC
 
-The easiest way to access the NFVI services is through VNC. Ensure port 5901 is open on your host firewall. 
+The easiest way to access the NFVI services is through VNC. Ensure port 5901 is open on your host firewall.
 
 Tight VNC Server is installed and can be run with the following command on the host machine
 

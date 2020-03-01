@@ -69,7 +69,7 @@ CONFIG_NEUTRON_ML2_FLAT_NETWORKS=*
 # <physical_network> specifying physical_network names usable for VLAN
 # provider and tenant networks, as well as ranges of VLAN tags on each
 # available for allocation to tenant networks.
-CONFIG_NEUTRON_ML2_VLAN_RANGES=provider:2000:4000
+CONFIG_NEUTRON_ML2_VLAN_RANGES={% if install_underlay == True %}provider:2000:4000{% endif %}
 
 # Comma-separated list of <tun_min>:<tun_max> tuples enumerating
 # ranges of GRE tunnel IDs that are available for tenant-network
@@ -96,7 +96,7 @@ CONFIG_NEUTRON_L2_AGENT=openvswitch
 # Networking Open vSwitch plugin. Each tuple in the list must be in
 # the format <physical_network>:<ovs_bridge>. Example: physnet1:br-
 # eth1,physnet2:br-eth2,physnet3:br-eth3
-CONFIG_NEUTRON_OVS_BRIDGE_MAPPINGS=extnet:br-ex,provider:br-vlan
+CONFIG_NEUTRON_OVS_BRIDGE_MAPPINGS=extnet:br-ex{% if install_underlay == True %},provider:br-vlan{% endif %}
 
 # Comma-separated list of colon-separated Open vSwitch
 # <bridge>:<interface> pairs. The interface will be added to the
@@ -107,7 +107,11 @@ CONFIG_NEUTRON_OVS_BRIDGE_MAPPINGS=extnet:br-ex,provider:br-vlan
 # issuing the following command: packstack --allinone --os-neutron-
 # ovs-bridge-mappings=ext-net:br-ex --os-neutron-ovs-bridge-interfaces
 # =br-ex:eth0
+{% if install_underlay == True %}
 CONFIG_NEUTRON_OVS_BRIDGE_IFACES=br-ex:eth5,br-vlan:bond0
+{% else %}
+CONFIG_NEUTRON_OVS_BRIDGE_IFACES=br-ex:eth3
+{% endif %}
 
 # Comma-separated list of Open vSwitch bridges that must be created
 # and connected to interfaces in ostack_compute nodes when flat or vlan type
@@ -117,7 +121,7 @@ CONFIG_NEUTRON_OVS_BRIDGE_IFACES=br-ex:eth5,br-vlan:bond0
 # ostack_compute=br-vlan --os-neutron-ovs-bridge-mappings="extnet:br-
 # ex,physnet1:br-vlan" --os-neutron-ovs-bridge-interfaces="br-ex:eth1
 # ,br-vlan:eth2"
-CONFIG_NEUTRON_OVS_BRIDGES_COMPUTE=br-vlan
+CONFIG_NEUTRON_OVS_BRIDGES_COMPUTE={% if install_underlay == True %}br-vlan{% endif %}
 
 # Name of physical network used for external network when enabling
 # CONFIG_PROVISION_DEMO. Name must be one of the included in

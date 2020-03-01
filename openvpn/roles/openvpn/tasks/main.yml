@@ -36,6 +36,7 @@
   template:
     src: iptables.sh
     dest: /opt/iptables.sh
+    mode: 0777
 
 - name: apply forwarding rules
   become: yes

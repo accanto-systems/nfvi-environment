@@ -18,30 +18,35 @@
     - name: destroy openshift nodes
       when: install_openshift == true
       command: vagrant destroy -f
+      ignore_errors: yes
       args:
         chdir: /opt/ocpnodes
 
     - name: destroy openshift helper
       when: install_openshift == true
       command: vagrant destroy -f
+      ignore_errors: yes
       args:
         chdir: /opt/ocphelper
 
     - name: destroy openstack
       when: install_openstack == true
       command: vagrant destroy -f
+      ignore_errors: yes
       args:
         chdir: /opt/openstack
 
     - name: destroy k8s
       when: install_kubeadm == true
       command: vagrant destroy -f
+      ignore_errors: yes
       args:
         chdir: /opt/k8s
 
     - name: destroy LM AIO
       when: install_aio == true
       command: vagrant destroy -f
+      ignore_errors: yes
       args:
         chdir: /opt/lm
 

@@ -38,24 +38,35 @@
       - tightvncserver
       - firefox
 
-- name: check if xstart already exists
-  stat:
-    path: "{{ '~' + ansible_user | expanduser }}/.vnc/xstartup"
-  register: xstart_file
-
-- name: create .vnc directory
-  when: xstart_file.stat.exists == False 
+- name: create ansible user .vnc directory
   file:
     path: "{{ '~' + ansible_user | expanduser }}/.vnc"
     state: directory
     mode: '0777'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
 
-- name: update xstart file
-  when: xstart_file.stat.exists == False 
+- name: update ansible user xstart file
   template:
     src: xstartup
     force: true
     dest: "{{ '~' + ansible_user | expanduser }}/.vnc/xstartup"
+    mode: 0777
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: create root user .vnc directory
+  file:
+    path: "{{ '~root' | expanduser }}/.vnc"
+    state: directory
+    mode: '0777'
+
+- name: update root xstart file
+  template:
+    src: xstartup
+    force: true
+    dest: "{{ '~root' | expanduser }}/.vnc/xstartup"
+    mode: 0777
 
 - name: check if vagrant deb file is already downloaded
   stat: 

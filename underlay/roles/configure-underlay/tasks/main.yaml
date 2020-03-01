@@ -3,7 +3,6 @@
 
 - name: run fabric-underlay
   import_tasks: "fabric-underlay.yml"
-  when: install_underlay == true
 
 - name: run onos
   import_tasks: "onos.yml"

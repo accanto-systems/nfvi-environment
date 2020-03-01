@@ -5,4 +5,4 @@
   become: yes
   tasks:
     - import_role:
-        name: configure-underlay
+        name: openvpn

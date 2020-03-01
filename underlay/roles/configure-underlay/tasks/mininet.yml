@@ -28,9 +28,8 @@
   when: mininet_result.stat.exists == False
 
 - name: remove test controller
-  apt: 
-    name: openvswitch-testcontroller
-    state: absent
+  command: "apt-get -y --purge remove openvswitch-testcontroller"
+  warn: false
 
 - name: check if mininet is running
   delegate_to: basehost

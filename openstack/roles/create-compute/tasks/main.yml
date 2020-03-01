@@ -1,8 +1,3 @@
-- name: ensure underlay is enabled
-  fail:
-    msg: Underlay must be enabled to setup Openstack.
-  when: install_underlay != True
-
 # install openstack vms
 - name: check if control node is up
   wait_for:

@@ -18,3 +18,7 @@
 - name: Include openshift playbook
   import_playbook: openshift/setup-openshift.yaml
   when: install_openshift == true
+
+- name: Include openvpn playbook
+  import_playbook: openvpn/setup-openvpn.yaml
+  when: install_openvpn == true

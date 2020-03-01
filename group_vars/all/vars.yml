@@ -7,8 +7,8 @@ install_openstack: True
 install_kubeadm: False
 install_openshift: False
 install_underlay: True
-install_openvpn: False
-install_skydive: False
+install_openvpn: True
+install_skydive: True
 install_aio: False
 
 ###############################################
@@ -18,7 +18,28 @@ subscription_user: user
 subscription_password: password
 # if set to true this will install official redhat openstack, Redhat subscription properties must be provided
 # if set to false the unsupported centos openstack distribution will be installed
+
+###############################################
+# Openstack
+###############################################
 openstack_offical_redhat: False
+# redhat pool id
 openstack_pool_id: pool_id
+openstack_install_demo: True
 openstack_public_ip: "172.24.4.3"
 openstack_public_cidr: "172.24.4.0/24"
+openstack_start_float: "172.24.4.4"
+openstack_end_float: "172.24.4.250"
+
+###############################################
+# OpenVPN
+###############################################
+openvpn_port: 1194
+# uncomment this variable if you wish to override the public ip address of the openvpn server
+# in the generated client.ovpn file
+#openvpn_public_ip: 
+
+###############################################
+# Skydive
+###############################################
+skydive_url: https://github.com/skydive-project/skydive/releases/download/v0.23.0/skydive
